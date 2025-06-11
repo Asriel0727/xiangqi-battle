@@ -92,7 +92,7 @@ def pos_to_xy(pos):
 def draw_board_image(board_data):
     os.makedirs("images", exist_ok=True)
 
-    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "white")
+    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
     draw = ImageDraw.Draw(img)
 
     # 畫網格線
