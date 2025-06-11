@@ -33,11 +33,30 @@ def parse_move(issue_title):
 def load_board():
     if not os.path.exists(BOARD_FILE):
         print("⚠️ 找不到 board.json，初始化空棋盤")
-        return {"turn": "red", "board": {}}
+        return {"turn": "red", "board": {}, "history": []}
+    
     with open(BOARD_FILE, 'r', encoding='utf-8') as f:
         data = json.load(f)
         print(f"✅ 從 {BOARD_FILE} 載入棋盤資料")
-        return data
+
+    # 如果是舊格式（直接是 pos-to-piece dict），轉換為新版格式
+    if all(isinstance(k, str) and isinstance(v, str) for k, v in data.items()):
+        print("⚠️ 偵測到舊格式棋盤，自動轉換為新格式")
+        data = {
+            "turn": "red",
+            "board": data,
+            "history": []
+        }
+
+    # 確保基本欄位存在
+    if "board" not in data:
+        data["board"] = {}
+    if "turn" not in data:
+        data["turn"] = "red"
+    if "history" not in data:
+        data["history"] = []
+
+    return data
 
 def save_board(data):
     os.makedirs("data", exist_ok=True)
