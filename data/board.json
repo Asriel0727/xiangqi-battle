@@ -9,7 +9,6 @@
     "g1": "red_elephant",
     "h1": "red_knight",
     "i1": "red_rook",
-    "b3": "red_cannon",
     "h3": "red_cannon",
     "a4": "red_pawn",
     "c4": "red_pawn",
@@ -32,9 +31,11 @@
     "e7": "black_pawn",
     "g7": "black_pawn",
     "i7": "black_pawn",
-    "a2": "red_rook"
+    "a2": "red_rook",
+    "b6": "red_cannon"
   },
   "history": [
-    "a1-a2"
+    "a1-a2",
+    "b3-b6"
   ]
 }
