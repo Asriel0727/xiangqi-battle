@@ -26,19 +26,24 @@ def parse_move(issue_title):
     try:
         _, _, move, game_id = issue_title.strip().split('|')
         return move.strip(), game_id.strip()
-    except:
+    except Exception as e:
+        print(f"⚠️ 解析 ISSUE_TITLE 失敗: {e}")
         return None, None
 
 def load_board():
     if not os.path.exists(BOARD_FILE):
+        print("⚠️ 找不到 board.json，初始化空棋盤")
         return {"turn": "red", "board": {}}
     with open(BOARD_FILE, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        data = json.load(f)
+        print(f"✅ 從 {BOARD_FILE} 載入棋盤資料")
+        return data
 
 def save_board(data):
     os.makedirs("data", exist_ok=True)
     with open(BOARD_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+    print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
 
 def update_readme(move):
     with open(README_FILE, 'r', encoding='utf-8') as f:
@@ -48,16 +53,22 @@ def update_readme(move):
     content += f"\n\n✅ 最新一步：{move}"
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
+    print("✅ README.md 更新完成")
 
 def post_comment(repo, issue_num, body):
     issue = repo.get_issue(number=issue_num)
     issue.create_comment(body)
     issue.edit(state="closed")
+    print(f"✅ 已於 Issue #{issue_num} 留言並關閉")
 
 def pos_to_xy(pos):
     col = ord(pos[0].lower()) - ord('a')
     row = int(pos[1:]) - 1
-    return col * CELL_SIZE, row * CELL_SIZE
+    # 反轉 Y 軸，讓棋盤1排在下方
+    y = (BOARD_HEIGHT - 1 - row) * CELL_SIZE
+    x = col * CELL_SIZE
+    print(f"DEBUG: 位置 {pos} 轉換成像素座標 ({x}, {y})")
+    return x, y
 
 def draw_board_image(board_data):
     os.makedirs("images", exist_ok=True)
@@ -74,22 +85,24 @@ def draw_board_image(board_data):
         draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
 
     # 畫棋子圖片
+    total_pieces = 0
     for pos, piece in board_data.get("board", {}).items():
         x, y = pos_to_xy(pos)
         try:
             piece_path = os.path.join(PIECE_IMG_DIR, f"{piece}.png")
             piece_img = Image.open(piece_path).resize((CELL_SIZE, CELL_SIZE))
             img.paste(piece_img, (x, y), piece_img.convert("RGBA"))
+            total_pieces += 1
         except Exception as e:
-            print(f"⚠️ 無法載入 {piece}：{e}")
+            print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
 
     img.save(BOARD_IMAGE)
-    print("✅ 圖片儲存成功：", BOARD_IMAGE)
+    print(f"✅ 棋盤圖片生成成功，總共繪製了 {total_pieces} 個棋子，存成 {BOARD_IMAGE}")
 
 def main():
     move, game_id = parse_move(ISSUE_TITLE)
     if not move:
-        print("Invalid move format.")
+        print("⚠️ Invalid move format in ISSUE_TITLE.")
         return
 
     g = Github(TOKEN)
@@ -105,6 +118,8 @@ def main():
     piece = board["board"].pop(src, None)
     if piece:
         board["board"][dst] = piece
+    else:
+        print(f"⚠️ 沒有找到 {src} 位置的棋子，無法移動")
 
     save_board(board)
     draw_board_image(board)
