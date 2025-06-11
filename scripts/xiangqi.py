@@ -24,11 +24,32 @@ PIECE_IMG_DIR = "images/pieces"
 
 def parse_move(issue_title):
     try:
-        _, _, move, game_id = issue_title.strip().split('|')
-        return move.strip(), game_id.strip()
+        _, category, action, game_id = issue_title.strip().split('|')
+        return category.strip(), action.strip(), game_id.strip()
     except Exception as e:
         print(f"⚠️ 解析 ISSUE_TITLE 失敗: {e}")
-        return None, None
+        return None, None, None
+        
+def reset_board():
+    print("♟️ 正在建立新的棋局...")
+    board = {
+        "turn": "red",
+        "board": {
+            "a1": "red_rook", "b1": "red_knight", "c1": "red_elephant", "d1": "red_mandarin",
+            "e1": "red_king", "f1": "red_mandarin", "g1": "red_elephant", "h1": "red_knight", "i1": "red_rook",
+            "b3": "red_cannon", "h3": "red_cannon",
+            "a4": "red_pawn", "c4": "red_pawn", "e4": "red_pawn", "g4": "red_pawn", "i4": "red_pawn",
+            "a10": "black_rook", "b10": "black_knight", "c10": "black_elephant", "d10": "black_mandarin",
+            "e10": "black_king", "f10": "black_mandarin", "g10": "black_elephant", "h10": "black_knight", "i10": "black_rook",
+            "b8": "black_cannon", "h8": "black_cannon",
+            "a7": "black_pawn", "c7": "black_pawn", "e7": "black_pawn", "g7": "black_pawn", "i7": "black_pawn"
+        },
+        "history": []
+    }
+    save_board(board)
+    draw_board_image(board)
+    update_readme("新對局開始", board["turn"])
+    return board
 
 def load_board():
     if not os.path.exists(BOARD_FILE):
@@ -64,15 +85,22 @@ def save_board(data):
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
 
-def update_readme(move):
+def update_readme(move, turn):
     with open(README_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
+
+    # 移除舊的最新一步與回合提示
     if "✅ 最新一步：" in content:
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
-    content += f"\n\n✅ 最新一步：{move}"
+
+    # 加上新的資訊
+    chinese_turn = "紅" if turn == "red" else "黑"
+    content += f"\n\n✅ 最新一步：{move}\n🎯 現在輪到：**{chinese_turn}方**"
+
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
-    print("✅ README.md 更新完成")
+
+    print("✅ README.md 已更新，目前輪到：", turn)
 
 def post_comment(repo, issue_num, body):
     issue = repo.get_issue(number=issue_num)
@@ -119,31 +147,43 @@ def draw_board_image(board_data):
     print(f"✅ 棋盤圖片生成成功，總共繪製了 {total_pieces} 個棋子，存成 {BOARD_IMAGE}")
 
 def main():
-    move, game_id = parse_move(ISSUE_TITLE)
-    if not move:
-        print("⚠️ Invalid move format in ISSUE_TITLE.")
+    category, action, game_id = parse_move(ISSUE_TITLE)
+    if not category or not action:
+        print("⚠️ 無法解析 Issue Title，請檢查格式")
         return
 
     g = Github(TOKEN)
     repo = g.get_repo(REPO_NAME)
 
-    board = load_board()
-    if "history" not in board:
-        board["history"] = []
-    board["history"].append(move)
+    if category == "chess" and action == "new":
+        board = reset_board()
+        post_comment(repo, ISSUE_NUMBER, "🆕 已啟動新對局，請紅方先行。")
+        return
 
-    # 簡單模擬移動（不檢查合法性）
-    src, dst = move.split('-')
-    piece = board["board"].pop(src, None)
-    if piece:
-        board["board"][dst] = piece
-    else:
-        print(f"⚠️ 沒有找到 {src} 位置的棋子，無法移動")
+    if category == "move":
+        board = load_board()
+        move = action
 
-    save_board(board)
-    draw_board_image(board)
-    update_readme(move)
-    post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 {move} 已紀錄，棋盤已更新（未驗證合法性）。")
+        if "history" not in board:
+            board["history"] = []
+        board["history"].append(move)
+
+        # 執行移動（簡化，不檢查合法性）
+        src, dst = move.split('-')
+        piece = board["board"].pop(src, None)
+        if piece:
+            board["board"][dst] = piece
+            board["turn"] = "black" if board["turn"] == "red" else "red"
+        else:
+            print(f"⚠️ 沒有找到 {src} 的棋子，無法移動")
+
+        save_board(board)
+        draw_board_image(board)
+        update_readme(move, board["turn"])
+        post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 `{move}` 已執行，現在輪到 **{board['turn']}** 方")
+        return
+
+    print("⚠️ 不支援的指令類型")
 
 if __name__ == "__main__":
     main()
