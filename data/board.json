@@ -1,7 +1,6 @@
 {
-  "turn": "red",
+  "turn": "black",
   "board": {
-    "b1": "red_knight",
     "c1": "red_elephant",
     "d1": "red_mandarin",
     "e1": "red_king",
@@ -32,10 +31,12 @@
     "g7": "black_pawn",
     "i7": "black_pawn",
     "a2": "red_rook",
-    "a9": "black_rook"
+    "a9": "black_rook",
+    "b2": "red_knight"
   },
   "history": [
     "a1-a2",
-    "a10-a9"
+    "a10-a9",
+    "b1-b2"
   ]
 }
