@@ -31,11 +31,12 @@
     "e7": "black_pawn",
     "g7": "black_pawn",
     "i7": "black_pawn",
-    "a2": "red_rook",
-    "b6": "red_cannon"
+    "b6": "red_cannon",
+    "a1": "red_rook"
   },
   "history": [
     "a1-a2",
-    "b3-b6"
+    "b3-b6",
+    "a2-a1"
   ]
 }
