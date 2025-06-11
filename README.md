@@ -29,3 +29,6 @@
 [移動：b2 → b3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cb2-b3%7Cgame001)
 
 請根據棋局輪到哪一方來走合法的一步。
+
+
+✅ 最新一步：a1-a2

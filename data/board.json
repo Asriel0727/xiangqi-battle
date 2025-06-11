@@ -1,5 +1,7 @@
 {
   "turn": "red",
   "board": [],
-  "history": []
+  "history": [
+    "a1-a2"
+  ]
 }
