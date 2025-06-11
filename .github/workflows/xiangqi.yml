@@ -22,7 +22,7 @@ jobs:
           if [ -f scripts/requirements.txt ]; then pip install -r scripts/requirements.txt; fi
 
       - name: Run move script
-        run: python scripts/xiangqi.py
+        run: python Script/xiangqi.py
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
