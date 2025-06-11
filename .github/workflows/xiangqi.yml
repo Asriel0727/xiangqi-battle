@@ -11,7 +11,8 @@ permissions:
 jobs:
   handle-move:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'xiangqi|move|')
+    if: startsWith(github.event.issue.title, 'xiangqi|move|') || startsWith(github.event.issue.title, 'xiangqi|chess|new|')
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
