@@ -36,5 +36,6 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md data/board.json
+          git add README.md data/board.json images/
           git commit -m "update board" || echo "No changes to commit"
           git push
