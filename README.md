@@ -13,16 +13,17 @@
 ## ⚫️ 當前棋盤
 
 
-
-✅ 最新一步：e10-e9  
+✅ 最新一步：新對局開始  
 🎯 現在輪到：**紅方**  
-![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/board_20250612091034.png?20250612091034)  
+![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/board_20250612092349.png?20250612092349)  
 
 ## ♟️ 可行動的棋子
 
 | 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |
 |------|------|-----------------------------|
-| 帥 | e2 | [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Ce2-e3%7Cgame001&body=請勿修改標題,直接提交即可)、[f2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Ce2-f2%7Cgame001&body=請勿修改標題,直接提交即可)、[e1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Ce2-e1%7Cgame001&body=請勿修改標題,直接提交即可)、[d2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Ce2-d2%7Cgame001&body=請勿修改標題,直接提交即可) |
+| 帥 | e1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Ce1-e2%7Cgame001&body=請勿修改標題,直接提交即可) |
+| 仕 | d1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cd1-e2%7Cgame001&body=請勿修改標題,直接提交即可) |
+| 仕 | f1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cf1-e2%7Cgame001&body=請勿修改標題,直接提交即可) |
 | 相 | c1 | [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cc1-e3%7Cgame001&body=請勿修改標題,直接提交即可)、[a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cc1-a3%7Cgame001&body=請勿修改標題,直接提交即可) |
 | 相 | g1 | [i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cg1-i3%7Cgame001&body=請勿修改標題,直接提交即可)、[e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cg1-e3%7Cgame001&body=請勿修改標題,直接提交即可) |
 | 馬 | b1 | [c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cb1-c3%7Cgame001&body=請勿修改標題,直接提交即可)、[a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi%7Cmove%7Cb1-a3%7Cgame001&body=請勿修改標題,直接提交即可) |
@@ -40,9 +41,6 @@
 
 ### 📜 最近五步：
 
-1. 黑方 (Asriel0727)：e10-e9
-2. 紅方 (Asriel0727)：e1-e2
   
 
 👉 [重開一局](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可)
-
