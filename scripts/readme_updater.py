@@ -23,22 +23,29 @@ def load_board(board_file):
 
     return data
 
+def get_chinese_piece_name(color, piece_type):
+    if piece_type == "king":
+        return "帥" if color == "red" else "將"
+    elif piece_type == "mandarin":
+        return "仕" if color == "red" else "士"
+    elif piece_type == "elephant":
+        return "相" if color == "red" else "象"
+    elif piece_type == "pawn":
+        return "兵" if color == "red" else "卒"
+    elif piece_type == "cannon":
+        return "炮"
+    elif piece_type == "rook":
+        return "車"
+    elif piece_type == "knight":
+        return "馬"
+    else:
+        return "？"
+
 def generate_moves_table(board, turn, repo_name):
     """生成移動建議表格"""
     moves_table = "## ♟️ 可行動的棋子\n\n"
     moves_table += "| 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |\n"
     moves_table += "|------|------|-----------------------------|\n"
-    
-    # 棋子類型對應的中文名稱
-    piece_names = {
-        "king": "將/帥",
-        "mandarin": "士",
-        "elephant": "相/象",
-        "knight": "馬",
-        "rook": "車",
-        "cannon": "炮",
-        "pawn": "兵/卒"
-    }
     
     # 按棋子類型分組
     moves_by_piece = {}
@@ -65,7 +72,8 @@ def generate_moves_table(board, turn, repo_name):
                     issue_link = f"https://github.com/{repo_name}/issues/new?title={encoded_title}&body=請勿修改標題,直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
 
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {'、'.join(move_links)} |\n"
+                chinese_name = get_chinese_piece_name(turn, piece_type)
+                moves_table += f"| {chinese_name} | {pos} | {'、'.join(move_links)} |\n"
     
     return moves_table
 
@@ -106,7 +114,7 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
 
 {history_section}  
 
-[重開一局]{"https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可"}
+[重開一局]("https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可")
 
 """
 
