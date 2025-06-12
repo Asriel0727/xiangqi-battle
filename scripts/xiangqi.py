@@ -80,6 +80,34 @@ def load_board():
 
     return data
 
+def update_readme(move, turn, image_filename):
+    with open(README_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    if "✅ 最新一步：" in content:
+        content = content.rsplit("✅ 最新一步：", 1)[0].strip()
+
+    chinese_turn = "紅" if turn == "red" else "黑"
+
+    # 加上隨機參數避免快取
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/{image_filename}?{timestamp}"
+
+    new_section = f"""
+
+![current board]({image_url})
+
+✅ 最新一步：{move}  
+🎯 現在輪到：**{chinese_turn}方**
+"""
+    content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
+
+    with open(README_FILE, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    print("✅ README.md 已更新，目前輪到：", turn)
+
+
 def save_board(data):
     os.makedirs("data", exist_ok=True)
     with open(BOARD_FILE, 'w', encoding='utf-8') as f:
