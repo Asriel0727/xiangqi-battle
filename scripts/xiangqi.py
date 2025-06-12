@@ -2,8 +2,7 @@ import os
 import json
 from github import Github
 from PIL import Image, ImageDraw
-import time
-import subprocess
+from datetime import datetime
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -96,10 +95,9 @@ def update_readme(move, turn):
 
     chinese_turn = "紅" if turn == "red" else "黑"
     
-    timestamp = int(time.time())
-    commit_sha = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).decode("utf-8").strip()
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?ts={timestamp}&sha={commit_sha}"
-    print(f"🔄 生成的图片 URL: {image_url}")
+    # 加上隨機參數避免快取
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?{timestamp}"
 
 
     new_section = f"""
@@ -133,13 +131,7 @@ def pos_to_xy(pos):
 
 def draw_board_image(board_data):
     os.makedirs("images", exist_ok=True)
-    
-    # 强制删除旧图片
-    if os.path.exists(BOARD_IMAGE):
-        os.remove(BOARD_IMAGE)
-        print("♻️ 已删除旧图片")
 
-    # 生成新图片（确保使用最新 board_data）
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
     draw = ImageDraw.Draw(img)
 
@@ -164,7 +156,7 @@ def draw_board_image(board_data):
             print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
 
     img.save(BOARD_IMAGE)
-    print(f"✅ 图片已保存到: {os.path.abspath(BOARD_IMAGE)}")
+    print(f"✅ 棋盤圖片生成成功，總共繪製了 {total_pieces} 個棋子，存成 {BOARD_IMAGE}")
 
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)
