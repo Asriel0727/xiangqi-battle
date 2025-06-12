@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 
 from xiangqi_rules import get_possible_moves
+from readme_updater import update_readme
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -60,8 +61,8 @@ def reset_board():
         "history": []
     }
     save_board(board)
-    image_filename = draw_board_image(board)  # 生成新圖片並獲取文件名
-    update_readme("新對局開始", board["turn"], image_filename)  # 傳入圖片文件名
+    image_filename = draw_board_image(board)
+    update_readme("新對局開始", board["turn"], image_filename, REPO_NAME, README_FILE, BOARD_FILE)
     return board
 
 def load_board():
@@ -91,87 +92,6 @@ def load_board():
         data["history"] = []
 
     return data
-
-def update_readme(move, turn, image_filename):
-    with open(README_FILE, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    if "✅ 最新一步：" in content:
-        content = content.rsplit("✅ 最新一步：", 1)[0].strip()
-
-    chinese_turn = "紅" if turn == "red" else "黑"
-
-    # 獲取當前棋盤狀態
-    board = load_board()
-
-    # 生成移動建議表格
-    moves_table = "## ♟️ 可行動的棋子\n\n"
-    moves_table += "| 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |\n"
-    moves_table += "|------|------|-----------------------------|\n"
-
-    # 棋子類型對應的中文名稱
-    piece_names = {
-        "king": "將/帥",
-        "mandarin": "士",
-        "elephant": "相/象",
-        "knight": "馬",
-        "rook": "車",
-        "cannon": "炮",
-        "pawn": "兵/卒"
-    }
-
-    # 按棋子類型分組
-    moves_by_piece = {}
-    for pos, piece in board["board"].items():
-        if piece.startswith(turn):
-            piece_type = piece.split('_')[1]
-            possible_moves = get_possible_moves(board, pos)
-            if possible_moves:
-                if piece_type not in moves_by_piece:
-                    moves_by_piece[piece_type] = []
-                moves_by_piece[piece_type].append((pos, possible_moves))
-
-    # 按指定順序顯示棋子
-    display_order = ["king", "mandarin", "elephant", "knight", "rook", "cannon", "pawn"]
-
-    for piece_type in display_order:
-        if piece_type in moves_by_piece:
-            for pos, moves in moves_by_piece[piece_type]:
-                # 創建所有移動連結
-                move_links = []
-                for target in moves:
-                    raw_title = f"xiangqi|move|{pos}-{target}|game001"
-                    encoded_title = raw_title.replace("|", "%7C")
-                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title={encoded_title}&body=請勿修改標題，直接提交即可"
-                    move_links.append(f"[{target}]({issue_link})")
-
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {'、'.join(move_links)} |\n"
-
-    # 加上隨機參數避免快取
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/{image_filename}?{timestamp}"
-
-    new_section = f"""
-![current board]({image_url})
-
-✅ 最新一步：{move}  
-🎯 現在輪到：**{chinese_turn}方**
-
-{moves_table}
-
-### 如何移動？
-1. 點擊表格中的位置連結 (如 `a2-a3`)
-2. 系統會自動建立包含移動指令的 Issue
-3. 直接提交該 Issue 即可完成移動
-"""
-
-    content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
-
-    with open(README_FILE, 'w', encoding='utf-8') as f:
-        f.write(content)
-
-    print("✅ README.md 已更新，目前輪到：", turn)
-
 
 def save_board(data):
     os.makedirs("data", exist_ok=True)
@@ -320,7 +240,7 @@ def main():
 
         save_board(board)
         image_filename = draw_board_image(board)
-        update_readme(move, board["turn"], image_filename)
+        update_readme(move, board["turn"], image_filename, REPO_NAME, README_FILE, BOARD_FILE)
         post_comment(repo, ISSUE_NUMBER, f"✅ 移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
         return
 
