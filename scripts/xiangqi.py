@@ -180,45 +180,6 @@ def pos_to_xy(pos):
     print(f"DEBUG: 位置 {pos} 轉換成像素座標 ({x}, {y})")
     return x, y
 
-def draw_board_image(board_data):
-    os.makedirs("images", exist_ok=True)
-
-    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
-    draw = ImageDraw.Draw(img)
-
-    # 畫網格線
-    for i in range(BOARD_WIDTH):
-        x = i * CELL_SIZE + CELL_SIZE // 2
-        draw.line([(x, CELL_SIZE // 2), (x, IMG_HEIGHT - CELL_SIZE // 2)], fill="black", width=1)
-    for j in range(BOARD_HEIGHT):
-        y = j * CELL_SIZE + CELL_SIZE // 2
-        draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
-
-    # 畫棋子圖片
-    total_pieces = 0
-    for pos, piece in board_data.get("board", {}).items():
-        x, y = pos_to_xy(pos)
-        try:
-            piece_path = os.path.join(PIECE_IMG_DIR, f"{piece}.png")
-            piece_img = Image.open(piece_path).resize((CELL_SIZE, CELL_SIZE))
-            img.paste(piece_img, (x, y), piece_img.convert("RGBA"))
-            total_pieces += 1
-        except Exception as e:
-            print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
-
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    new_image_name = f"board_{timestamp}.png"
-    new_image_path = os.path.join("images/board", new_image_name)
-    img.save(new_image_path)
-    print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
-
-    # 同步為最新棋盤
-    img.save(BOARD_IMAGE)
-
-    return new_image_name
-
-
-
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)
     if not category or not action:
