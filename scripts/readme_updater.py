@@ -81,22 +81,30 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     board = load_board(board_file)
     moves_table = generate_moves_table(board, turn, repo_name)
 
+    # 顯示最近 5 步歷史
+    recent_moves = board.get("history", [])[-5:]
+    history_section = "### 📜 最近五步：\n\n"
+    for i, item in enumerate(recent_moves[::-1], 1):
+        side = "紅" if item["turn"] == "red" else "黑"
+        user = item.get("user", "未知")
+        history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
+
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     image_url = f"https://raw.githubusercontent.com/{repo_name}/main/images/board/{image_filename}?{timestamp}"
 
     new_section = f"""
-![current board]({image_url})
 
 ✅ 最新一步：{move}  
 🎯 現在輪到：**{chinese_turn}方**
+![current board]({image_url})
 
 {moves_table}
 
-### 如何移動？
-1. 點擊表格中的位置連結 (如 `a2-a3`)
-2. 系統會自動建立包含移動指令的 Issue
-3. 直接提交該 Issue 即可完成移動
+{history_section}
+
+[重開一局]{"https://github.com/{repo_name}/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題，直接提交即可"}
+
 """
 
     content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"

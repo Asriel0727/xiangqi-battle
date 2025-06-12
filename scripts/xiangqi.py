@@ -202,6 +202,10 @@ def main():
 
     if category == "move":
         board = load_board()
+
+        issue = repo.get_issue(number=ISSUE_NUMBER)  
+        github_username = issue.user.login           
+
         move = action
 
         # 基本格式檢查
@@ -232,7 +236,7 @@ def main():
         # 執行移動
         if "history" not in board:
             board["history"] = []
-        board["history"].append(move)
+        board["history"].append({"turn": board["turn"], "move": move, "user": github_username})
         
         board["board"].pop(src)
         board["board"][dst] = piece
