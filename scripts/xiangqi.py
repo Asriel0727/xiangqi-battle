@@ -97,7 +97,8 @@ def update_readme(move, turn):
     
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    image_url = f"images/board.png?{timestamp}"
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?{timestamp}"
+
 
     new_section = f"""
 

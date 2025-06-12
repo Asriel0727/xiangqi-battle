@@ -7,7 +7,8 @@
 
 ## ⚫️ 當前棋盤
 
-![current board](images/board.png)
+![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?20250612190001)
+
 
 > 棋盤圖片會隨每一步更新
 
