@@ -133,7 +133,13 @@ def pos_to_xy(pos):
 
 def draw_board_image(board_data):
     os.makedirs("images", exist_ok=True)
+    
+    # 强制删除旧图片
+    if os.path.exists(BOARD_IMAGE):
+        os.remove(BOARD_IMAGE)
+        print("♻️ 已删除旧图片")
 
+    # 生成新图片（确保使用最新 board_data）
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
     draw = ImageDraw.Draw(img)
 
@@ -158,7 +164,7 @@ def draw_board_image(board_data):
             print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
 
     img.save(BOARD_IMAGE)
-    print(f"✅ 棋盤圖片生成成功，總共繪製了 {total_pieces} 個棋子，存成 {BOARD_IMAGE}")
+    print(f"✅ 图片已保存到: {os.path.abspath(BOARD_IMAGE)}")
 
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)
