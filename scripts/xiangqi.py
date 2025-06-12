@@ -2,8 +2,6 @@ import os
 import json
 from github import Github
 from PIL import Image, ImageDraw
-import time
-import re
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -95,20 +93,7 @@ def update_readme(move, turn):
     if "✅ 最新一步：" in content:
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
 
-    # 取得當下時間戳 (秒)
-    timestamp = int(time.time())
-
-    # 更新 README 內棋盤圖片連結，加上 ?ts=時間戳，避免快取
-    # 假設你 README 裡的棋盤圖片標記是：
-    # ![棋盤圖片](images/board.png)
-    # 會改成：
-    # ![棋盤圖片](images/board.png?ts=時間戳)
-    content = re.sub(
-        r"!\[棋盤圖片\]\(images/board\.png(?:\?ts=\d+)?\)",
-        f"![棋盤圖片](images/board.png?ts={timestamp})",
-        content
-    )
-
+    # 加上新的資訊
     chinese_turn = "紅" if turn == "red" else "黑"
     content += f"\n\n✅ 最新一步：{move}\n🎯 現在輪到：**{chinese_turn}方**"
 
@@ -195,7 +180,7 @@ def main():
         save_board(board)
         draw_board_image(board)
         update_readme(move, board["turn"])
-        post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 `{move}` 已執行，現在輪到 **{board['turn']}** 方")
+        post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 {move} 已執行，現在輪到 **{board['turn']}** 方")
         return
 
     print("⚠️ 不支援的指令類型")
