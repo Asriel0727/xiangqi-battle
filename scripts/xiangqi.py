@@ -86,33 +86,43 @@ def save_board(data):
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
 
-def update_readme(move, turn):
-    with open(README_FILE, 'r', encoding='utf-8') as f:
-        content = f.read()
+def draw_board_image(board_data):
+    os.makedirs("images", exist_ok=True)
 
-    if "✅ 最新一步：" in content:
-        content = content.rsplit("✅ 最新一步：", 1)[0].strip()
+    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
+    draw = ImageDraw.Draw(img)
 
-    chinese_turn = "紅" if turn == "red" else "黑"
-    
-    # 加上隨機參數避免快取
+    # 畫網格線
+    for i in range(BOARD_WIDTH):
+        x = i * CELL_SIZE + CELL_SIZE // 2
+        draw.line([(x, CELL_SIZE // 2), (x, IMG_HEIGHT - CELL_SIZE // 2)], fill="black", width=1)
+    for j in range(BOARD_HEIGHT):
+        y = j * CELL_SIZE + CELL_SIZE // 2
+        draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
+
+    # 畫棋子圖片
+    total_pieces = 0
+    for pos, piece in board_data.get("board", {}).items():
+        x, y = pos_to_xy(pos)
+        try:
+            piece_path = os.path.join(PIECE_IMG_DIR, f"{piece}.png")
+            piece_img = Image.open(piece_path).resize((CELL_SIZE, CELL_SIZE))
+            img.paste(piece_img, (x, y), piece_img.convert("RGBA"))
+            total_pieces += 1
+        except Exception as e:
+            print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
+
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?{timestamp}"
+    new_image_name = f"board_{timestamp}.png"
+    new_image_path = os.path.join("images", new_image_name)
+    img.save(new_image_path)
+    print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
 
+    # 同步為最新棋盤
+    img.save(BOARD_IMAGE)
 
-    new_section = f"""
+    return new_image_name
 
-![current board]({image_url})
-
-✅ 最新一步：{move}  
-🎯 現在輪到：**{chinese_turn}方**
-"""
-    content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
-
-    with open(README_FILE, 'w', encoding='utf-8') as f:
-        f.write(content)
-
-    print("✅ README.md 已更新，目前輪到：", turn)
 
 def post_comment(repo, issue_num, body):
     issue = repo.get_issue(number=issue_num)
@@ -155,8 +165,18 @@ def draw_board_image(board_data):
         except Exception as e:
             print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
 
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    new_image_name = f"board_{timestamp}.png"
+    new_image_path = os.path.join("images", new_image_name)
+    img.save(new_image_path)
+    print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
+
+    # 同步為最新棋盤
     img.save(BOARD_IMAGE)
-    print(f"✅ 棋盤圖片生成成功，總共繪製了 {total_pieces} 個棋子，存成 {BOARD_IMAGE}")
+
+    return new_image_name
+
+
 
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)
@@ -191,7 +211,8 @@ def main():
 
         save_board(board)
         draw_board_image(board)
-        update_readme(move, board["turn"])
+        image_filename = draw_board_image(board)
+        update_readme(move, board["turn"], image_filename)
         post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 {move} 已執行，現在輪到 **{board['turn']}** 方")
         return
 
