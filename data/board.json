@@ -1,9 +1,11 @@
 {
-  "turn": "black",
+  "turn": "red",
   "board": {
-    "b1": "red_rook",
+    "a1": "red_rook",
+    "b1": "red_knight",
     "c1": "red_elephant",
     "d1": "red_mandarin",
+    "e1": "red_king",
     "f1": "red_mandarin",
     "g1": "red_elephant",
     "h1": "red_knight",
@@ -12,41 +14,25 @@
     "h3": "red_cannon",
     "a4": "red_pawn",
     "c4": "red_pawn",
+    "e4": "red_pawn",
     "g4": "red_pawn",
     "i4": "red_pawn",
     "a10": "black_rook",
     "b10": "black_knight",
     "c10": "black_elephant",
     "d10": "black_mandarin",
+    "e10": "black_king",
     "f10": "black_mandarin",
     "g10": "black_elephant",
     "h10": "black_knight",
     "i10": "black_rook",
+    "b8": "black_cannon",
     "h8": "black_cannon",
     "a7": "black_pawn",
     "c7": "black_pawn",
     "e7": "black_pawn",
     "g7": "black_pawn",
-    "i6": "black_pawn",
-    "e3": "red_king",
-    "e9": "black_king",
-    "e5": "red_pawn"
+    "i7": "black_pawn"
   },
-  "history": [
-    "e1-e2",
-    "b8-b1",
-    "a1-b1",
-    "i7-i6",
-    "e2-e3",
-    {
-      "turn": "black",
-      "move": "e10-e9",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "e4-e5",
-      "user": "Asriel0727"
-    }
-  ]
+  "history": []
 }
