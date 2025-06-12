@@ -4,6 +4,8 @@ from github import Github
 from PIL import Image, ImageDraw
 from datetime import datetime
 
+from xiangqi_rules import get_possible_moves
+
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
 ISSUE_NUMBER = int(os.environ.get("ISSUE_NUMBER"))
@@ -88,17 +90,50 @@ def update_readme(move, turn, image_filename):
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
 
     chinese_turn = "紅" if turn == "red" else "黑"
+    
+    # 獲取當前棋盤狀態
+    board = load_board()
+    
+    # 生成移動建議表格
+    moves_table = "## ♟️ 可行動的棋子\n\n"
+    moves_table += "| 棋子 | 位置 | 可移動位置 | 行動連結 |\n"
+    moves_table += "|------|------|------------|----------|\n"
+    
+    # 獲取當前玩家的所有棋子
+    current_pieces = {pos: piece for pos, piece in board["board"].items() 
+                     if piece.startswith(turn)}
+    
+    for pos, piece in current_pieces.items():
+        possible_moves = get_possible_moves(board, pos)
+        if possible_moves:
+            piece_type = piece.split('_')[1]
+            move_links = []
+            for target in possible_moves:
+                issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}&body=請勿修改標題，直接提交即可"
+                move_links.append(f"[{target}]({issue_link})")
+            
+            # 將移動連結分組顯示，每組5個
+            grouped_links = [move_links[i:i+5] for i in range(0, len(move_links), 5)]
+            links_display = "<br>".join([", ".join(group) for group in grouped_links])
+            
+            moves_table += f"| {piece_type} | {pos} | {', '.join(possible_moves)} | {links_display} |\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/{image_filename}?{timestamp}"
 
     new_section = f"""
-
 ![current board]({image_url})
 
 ✅ 最新一步：{move}  
 🎯 現在輪到：**{chinese_turn}方**
+
+{moves_table}
+
+### 如何移動？
+1. 點擊上方表格中的位置連結 (如 [a2](https://...))
+2. 將會自動建立一個包含移動指令的 Issue
+3. 直接提交該 Issue 即可完成移動
 """
     content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
 
@@ -115,7 +150,9 @@ def save_board(data):
     print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
 
 def draw_board_image(board_data):
-    os.makedirs("images", exist_ok=True)
+    # 確保 board 目錄存在
+    board_dir = "images/board"
+    os.makedirs(board_dir, exist_ok=True)
 
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
     draw = ImageDraw.Draw(img)
@@ -142,7 +179,7 @@ def draw_board_image(board_data):
 
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     new_image_name = f"board_{timestamp}.png"
-    new_image_path = os.path.join("images/board", new_image_name)
+    new_image_path = os.path.join(board_dir, new_image_name)
     img.save(new_image_path)
     print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
 
@@ -150,10 +187,12 @@ def draw_board_image(board_data):
     img.save(BOARD_IMAGE)
 
     # 刪除舊的棋盤圖片（保留最新的一張）
-    board_dir = "images/board"
     if os.path.exists(board_dir):
-        board_files = [f for f in os.listdir(board_dir) if f.startswith("board_") and f.endswith(".png")]
+        board_files = [f for f in os.listdir(board_dir) 
+                      if f.startswith("board_") and f.endswith(".png")]
         board_files.sort()
+        print(f"找到的棋盤圖片: {board_files}")
+        
         # 保留最新的檔案，刪除其他
         for old_file in board_files[:-1]:
             try:
@@ -198,27 +237,47 @@ def main():
         board = load_board()
         move = action
 
+        # 基本格式檢查
+        if '-' not in move:
+            post_comment(repo, ISSUE_NUMBER, "⚠️ 移動指令格式錯誤，應為「起始位置-目標位置」(如 a2-a3)")
+            return
+
+        src, dst = move.split('-')
+        piece = board["board"].get(src)
+        
+        # 檢查是否存在棋子
+        if not piece:
+            post_comment(repo, ISSUE_NUMBER, f"⚠️ 沒有找到 {src} 的棋子，無法移動")
+            return
+            
+        # 檢查是否輪到該玩家
+        piece_color = piece.split('_')[0]
+        if piece_color != board["turn"]:
+            post_comment(repo, ISSUE_NUMBER, f"⚠️ 現在輪到 {board['turn']} 方，不能移動 {piece_color} 方的棋子")
+            return
+            
+        # 檢查移動是否合法
+        possible_moves = get_possible_moves(board, src)
+        if dst not in possible_moves:
+            post_comment(repo, ISSUE_NUMBER, f"⚠️ 非法移動！{piece} 不能從 {src} 移動到 {dst}")
+            return
+
+        # 執行移動
         if "history" not in board:
             board["history"] = []
         board["history"].append(move)
-
-        # 執行移動（簡化，不檢查合法性）
-        src, dst = move.split('-')
-        piece = board["board"].pop(src, None)
-        if piece:
-            board["board"][dst] = piece
-            board["turn"] = "black" if board["turn"] == "red" else "red"
-        else:
-            print(f"⚠️ 沒有找到 {src} 的棋子，無法移動")
+        
+        board["board"].pop(src)
+        board["board"][dst] = piece
+        board["turn"] = "black" if board["turn"] == "red" else "red"
 
         save_board(board)
-        draw_board_image(board)
         image_filename = draw_board_image(board)
         update_readme(move, board["turn"], image_filename)
-        post_comment(repo, ISSUE_NUMBER, f"✅ 步驟 {move} 已執行，現在輪到 **{board['turn']}** 方")
+        post_comment(repo, ISSUE_NUMBER, f"✅ 移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
         return
 
     print("⚠️ 不支援的指令類型")
-
+    
 if __name__ == "__main__":
     main()

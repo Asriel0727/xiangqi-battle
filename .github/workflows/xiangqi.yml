@@ -42,6 +42,11 @@ jobs:
           ls -la images/
           ls -la data/
 
+      - name: Debug directory structure
+        run: |
+          find images -type f
+          ls -la images/board/
+
       - name: Commit changes
         run: |
           git config user.name "github-actions"
