@@ -1,7 +1,7 @@
 import os
 import json
 from github import Github
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 
 from xiangqi_rules import get_possible_moves
@@ -185,6 +185,16 @@ def draw_board_image(board_data):
         y = j * CELL_SIZE + CELL_SIZE // 2
         draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
 
+    # 加上座標文字
+    font = ImageFont.load_default()
+    cols = "abcdefghi"
+    for row in range(1, BOARD_HEIGHT + 1):
+        for col_idx, col in enumerate(cols):
+            pos_label = f"{col}{row}"
+            x = col_idx * CELL_SIZE + CELL_SIZE // 2 + 2
+            y = (BOARD_HEIGHT - row) * CELL_SIZE + CELL_SIZE // 2 + 2
+            draw.text((x, y), pos_label, fill=(100, 100, 100), font=font)
+
     # 畫棋子圖片
     total_pieces = 0
     for pos, piece in board_data.get("board", {}).items():
@@ -197,6 +207,7 @@ def draw_board_image(board_data):
         except Exception as e:
             print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
 
+    # 儲存圖片
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     new_image_name = f"board_{timestamp}.png"
     new_image_path = os.path.join(board_dir, new_image_name)
@@ -206,14 +217,11 @@ def draw_board_image(board_data):
     # 同步為最新棋盤
     img.save(BOARD_IMAGE)
 
-    # 刪除舊的棋盤圖片（保留最新的一張）
+    # 刪除舊的棋盤圖片（保留最新一張）
     if os.path.exists(board_dir):
-        board_files = [f for f in os.listdir(board_dir) 
-                      if f.startswith("board_") and f.endswith(".png")]
+        board_files = [f for f in os.listdir(board_dir)
+                       if f.startswith("board_") and f.endswith(".png")]
         board_files.sort()
-        print(f"找到的棋盤圖片: {board_files}")
-        
-        # 保留最新的檔案，刪除其他
         for old_file in board_files[:-1]:
             try:
                 os.remove(os.path.join(board_dir, old_file))
