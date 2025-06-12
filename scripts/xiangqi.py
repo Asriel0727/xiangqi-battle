@@ -2,6 +2,7 @@ import os
 import json
 from github import Github
 from PIL import Image, ImageDraw
+from datetime import datetime
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -89,13 +90,23 @@ def update_readme(move, turn):
     with open(README_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 移除舊的最新一步與回合提示
     if "✅ 最新一步：" in content:
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
 
-    # 加上新的資訊
     chinese_turn = "紅" if turn == "red" else "黑"
-    content += f"\n\n✅ 最新一步：{move}\n🎯 現在輪到：**{chinese_turn}方**"
+    
+    # 加上隨機參數避免快取
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    image_url = f"images/board.png?{timestamp}"
+
+    new_section = f"""
+
+![current board]({image_url})
+
+✅ 最新一步：{move}  
+🎯 現在輪到：**{chinese_turn}方**
+"""
+    content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
 
     with open(README_FILE, 'w', encoding='utf-8') as f:
         f.write(content)
