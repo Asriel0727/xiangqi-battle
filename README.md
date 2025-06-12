@@ -8,64 +8,52 @@
 ## ⚫️ 當前棋盤
 
 
-![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/board_20250612042427.png?20250612042427)
+![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/board_20250612043258.png?20250612043258)
 
-✅ 最新一步：i9-i8  
+✅ 最新一步：新對局開始  
 🎯 現在輪到：**紅方**
 
 ## ♟️ 可行動的棋子
 
-點擊位置連結可直接建立移動指令：
+| 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |
+|------|------|-----------------------------|
+| 將/帥 | e1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|e1-e2&body=請勿修改標題，直接提交即可) |
+| 士 | d1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|d1-e2&body=請勿修改標題，直接提交即可) |
+| 士 | f1 | [e2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|f1-e2&body=請勿修改標題，直接提交即可) |
+| 相/象 | c1 | [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|c1-e3&body=請勿修改標題，直接提交即可) [a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|c1-a3&body=請勿修改標題，直接提交即可) |
+| 相/象 | g1 | [i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|g1-i3&body=請勿修改標題，直接提交即可) [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|g1-e3&body=請勿修改標題，直接提交即可) |
+| 馬 | b1 | [c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b1-c3&body=請勿修改標題，直接提交即可) [a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b1-a3&body=請勿修改標題，直接提交即可) |
+| 馬 | h1 | [i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h1-i3&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h1-g3&body=請勿修改標題，直接提交即可) |
+| 車 | a1 | [a2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a1-a2&body=請勿修改標題，直接提交即可) [a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a1-a3&body=請勿修改標題，直接提交即可) |
+| 車 | i1 | [i2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i1-i2&body=請勿修改標題，直接提交即可) [i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i1-i3&body=請勿修改標題，直接提交即可) |
+| 炮 | b3 | [b4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b4&body=請勿修改標題，直接提交即可) [b5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b5&body=請勿修改標題，直接提交即可) [b6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b6&body=請勿修改標題，直接提交即可) [b7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b7&body=請勿修改標題，直接提交即可) [b10](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b10&body=請勿修改標題，直接提交即可)<br>[更多...](#cannon-b3-moves) |
+| 炮 | h3 | [h4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h4&body=請勿修改標題，直接提交即可) [h5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h5&body=請勿修改標題，直接提交即可) [h6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h6&body=請勿修改標題，直接提交即可) [h7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h7&body=請勿修改標題，直接提交即可) [h10](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h10&body=請勿修改標題，直接提交即可)<br>[更多...](#cannon-h3-moves) |
+| 兵/卒 | a4 | [a5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a4-a5&body=請勿修改標題，直接提交即可) |
+| 兵/卒 | c4 | [c5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|c4-c5&body=請勿修改標題，直接提交即可) |
+| 兵/卒 | e4 | [e5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|e4-e5&body=請勿修改標題，直接提交即可) |
+| 兵/卒 | g4 | [g5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|g4-g5&body=請勿修改標題，直接提交即可) |
+| 兵/卒 | i4 | [i5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i4-i5&body=請勿修改標題，直接提交即可) |
 
-### 將 @ e2
-[e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|e2-e3&body=請勿修改標題，直接提交即可) [e1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|e2-e1&body=請勿修改標題，直接提交即可)
 
-### 士 @ d2
-[e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|d2-e3&body=請勿修改標題，直接提交即可) [e1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|d2-e1&body=請勿修改標題，直接提交即可)
 
-### 士 @ f2
-[e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|f2-e3&body=請勿修改標題，直接提交即可) [e1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|f2-e1&body=請勿修改標題，直接提交即可)
+<details>
+<summary>📜 查看所有移動選項</summary>
 
-### 相 @ g1
-[i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|g1-i3&body=請勿修改標題，直接提交即可)
-
-### 馬 @ h1
-[i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h1-i3&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h1-g3&body=請勿修改標題，直接提交即可)
-
-### 車 @ a2
-[a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a2-a3&body=請勿修改標題，直接提交即可) [a1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a2-a1&body=請勿修改標題，直接提交即可)
-
-### 車 @ i2
-[i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i2-i3&body=請勿修改標題，直接提交即可) [i1](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i2-i1&body=請勿修改標題，直接提交即可) [h2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i2-h2&body=請勿修改標題，直接提交即可) [g2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i2-g2&body=請勿修改標題，直接提交即可)
 
 ### 炮 @ b3
-[b4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b4&body=請勿修改標題，直接提交即可) [b5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b5&body=請勿修改標題，直接提交即可) [b6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b6&body=請勿修改標題，直接提交即可) [b7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b7&body=請勿修改標題，直接提交即可) [b9](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b9&body=請勿修改標題，直接提交即可)
-[c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-c3&body=請勿修改標題，直接提交即可) [d3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-d3&body=請勿修改標題，直接提交即可) [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-e3&body=請勿修改標題，直接提交即可) [f3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-f3&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-g3&body=請勿修改標題，直接提交即可)
-[a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-a3&body=請勿修改標題，直接提交即可)
+[b4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b4|game001&body=請勿修改標題，直接提交即可) [b5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b5|game001&body=請勿修改標題，直接提交即可) [b6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b6|game001&body=請勿修改標題，直接提交即可) [b7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b7|game001&body=請勿修改標題，直接提交即可) [b10](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b10|game001&body=請勿修改標題，直接提交即可)<br>
+[c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-c3|game001&body=請勿修改標題，直接提交即可) [d3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-d3|game001&body=請勿修改標題，直接提交即可) [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-e3|game001&body=請勿修改標題，直接提交即可) [f3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-f3|game001&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-g3|game001&body=請勿修改標題，直接提交即可)<br>
+[b2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-b2|game001&body=請勿修改標題，直接提交即可) [a3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|b3-a3|game001&body=請勿修改標題，直接提交即可)<br>
 
 ### 炮 @ h3
-[h4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h4&body=請勿修改標題，直接提交即可) [h5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h5&body=請勿修改標題，直接提交即可) [h6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h6&body=請勿修改標題，直接提交即可) [h7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h7&body=請勿修改標題，直接提交即可) [h10](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h10&body=請勿修改標題，直接提交即可)
-[i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-i3&body=請勿修改標題，直接提交即可) [h2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h2&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-g3&body=請勿修改標題，直接提交即可) [f3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-f3&body=請勿修改標題，直接提交即可) [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-e3&body=請勿修改標題，直接提交即可)
-[d3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-d3&body=請勿修改標題，直接提交即可) [c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-c3&body=請勿修改標題，直接提交即可)
+[h4](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h4|game001&body=請勿修改標題，直接提交即可) [h5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h5|game001&body=請勿修改標題，直接提交即可) [h6](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h6|game001&body=請勿修改標題，直接提交即可) [h7](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h7|game001&body=請勿修改標題，直接提交即可) [h10](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h10|game001&body=請勿修改標題，直接提交即可)<br>
+[i3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-i3|game001&body=請勿修改標題，直接提交即可) [h2](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-h2|game001&body=請勿修改標題，直接提交即可) [g3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-g3|game001&body=請勿修改標題，直接提交即可) [f3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-f3|game001&body=請勿修改標題，直接提交即可) [e3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-e3|game001&body=請勿修改標題，直接提交即可)<br>
+[d3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-d3|game001&body=請勿修改標題，直接提交即可) [c3](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|h3-c3|game001&body=請勿修改標題，直接提交即可)<br>
 
-### 兵 @ a4
-[a5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|a4-a5&body=請勿修改標題，直接提交即可)
-
-### 兵 @ c4
-[c5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|c4-c5&body=請勿修改標題，直接提交即可)
-
-### 兵 @ e4
-[e5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|e4-e5&body=請勿修改標題，直接提交即可)
-
-### 兵 @ g4
-[g5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|g4-g5&body=請勿修改標題，直接提交即可)
-
-### 兵 @ i4
-[i5](https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|move|i4-i5&body=請勿修改標題，直接提交即可)
-
+</details>
 
 
 ### 如何移動？
-1. 點擊上方的位置連結 (如 `a2-a3`)
-2. 將會自動建立一個包含移動指令的 Issue
+1. 點擊表格中的位置連結 (如 `a2-a3`)
+2. 系統會自動建立包含移動指令的 Issue
 3. 直接提交該 Issue 即可完成移動
