@@ -9,7 +9,7 @@
 
 
 
-![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?ts=1749695039&sha=5bdfc83)
+![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?ts=1749695373&sha=e2503d4)
 
-✅ 最新一步：新對局開始  
-🎯 現在輪到：**紅方**
+✅ 最新一步：a1-a2  
+🎯 現在輪到：**黑方**
