@@ -85,27 +85,58 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     if "✅ 最新一步：" in content:
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
 
-    chinese_turn = "紅" if turn == "red" else "黑"
     board = load_board(board_file)
-    moves_table = generate_moves_table(board, turn, repo_name)
-
-    # 顯示最近 5 步歷史
-    recent_moves = board.get("history", [])[-5:]
-    history_section = "### 📜 最近五步：\n\n"
-    for i, item in enumerate(recent_moves[::-1], 1):
-        if isinstance(item, dict) and "turn" in item and "move" in item:
-            side = "紅" if item["turn"] == "red" else "黑"
-            user = item.get("user", "未知")
-            history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
-        else:
-            history_section += f"{i}. ❓ 資料格式錯誤：{item}\n"
+    
+    # 判斷是否有勝負（turn為None表示遊戲結束）
+    game_ended = turn is None
+    
+    # 生成歷史紀錄部分
+    history_section = ""
+    if game_ended:
+        # 遊戲結束時顯示完整歷史
+        history_section = "### 📜 完整移動歷史：\n\n"
+        for i, item in enumerate(board.get("history", []), 1):
+            if isinstance(item, dict) and "turn" in item and "move" in item:
+                side = "紅" if item["turn"] == "red" else "黑"
+                user = item.get("user", "未知")
+                history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
+            else:
+                history_section += f"{i}. ❓ 資料格式錯誤：{item}\n"
+    else:
+        # 遊戲進行中只顯示最近5步
+        recent_moves = board.get("history", [])[-5:]
+        history_section = "### 📜 最近五步：\n\n"
+        for i, item in enumerate(recent_moves[::-1], 1):
+            if isinstance(item, dict) and "turn" in item and "move" in item:
+                side = "紅" if item["turn"] == "red" else "黑"
+                user = item.get("user", "未知")
+                history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
+            else:
+                history_section += f"{i}. ❓ 資料格式錯誤：{item}\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     image_url = f"https://raw.githubusercontent.com/{repo_name}/main/images/board/{image_filename}?{timestamp}"
     reset_url = f"https://github.com/{repo_name}/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可"
-    new_section = f"""
 
+    if game_ended:
+        # 遊戲結束時的顯示
+        winner = "紅" if "紅方勝" in move else "黑"
+        new_section = f"""
+🎉 遊戲結束！{winner}方獲勝！
+
+✅ 最後一步：{move}  
+![current board]({image_url})  
+
+{history_section}  
+
+👉 [開始新對局]({reset_url})
+"""
+    else:
+        # 遊戲進行中的顯示
+        chinese_turn = "紅" if turn == "red" else "黑"
+        moves_table = generate_moves_table(board, turn, repo_name)
+        new_section = f"""
 ✅ 最新一步：{move}  
 🎯 現在輪到：**{chinese_turn}方**  
 ![current board]({image_url})  
@@ -115,7 +146,6 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
 {history_section}  
 
 👉 [重開一局]({reset_url})
-
 """
 
     content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
@@ -123,4 +153,4 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     with open(readme_file, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    print("✅ README.md 已更新，目前輪到：", turn)
+    print("✅ README.md 已更新", "，遊戲已結束" if game_ended else f"，目前輪到：{turn}")

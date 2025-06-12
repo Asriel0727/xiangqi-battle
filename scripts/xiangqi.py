@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 
 from xiangqi_rules import get_possible_moves
+from xiangqi_rules import check_game_result
 from readme_updater import update_readme
 
 # 環境變數
@@ -244,9 +245,30 @@ def main():
 
         save_board(board)
         image_filename = draw_board_image(board)
-        update_readme(move, board["turn"], image_filename, REPO_NAME, README_FILE, BOARD_FILE)
-        post_comment(repo, ISSUE_NUMBER, f"✅ 移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
-        return
+        # 檢查遊戲是否結束
+        winner = check_game_result(board)
+        if winner:
+            # 遊戲結束，更新 README 並顯示所有歷史
+            update_readme(
+                f"{move} (遊戲結束 - {'紅' if winner == 'red' else '黑'}方勝)", 
+                None,  # 傳入 None 表示遊戲結束
+                image_filename, 
+                REPO_NAME, 
+                README_FILE, 
+                BOARD_FILE
+            )
+            post_comment(
+                repo, 
+                ISSUE_NUMBER, 
+                f"🏆 遊戲結束！{'紅' if winner == 'red' else '黑'}方獲勝！\n\n" +
+                "所有移動歷史：\n" + 
+                "\n".join(f"{i+1}. {h['turn']}方 ({h['user']}): {h['move']}" 
+                        for i, h in enumerate(board['history']))
+            )
+            return
+        else:
+            update_readme(move, board["turn"], image_filename, REPO_NAME, README_FILE, BOARD_FILE)
+            post_comment(repo, ISSUE_NUMBER, f"✅ 移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
 
     print("⚠️ 不支援的指令類型")
 

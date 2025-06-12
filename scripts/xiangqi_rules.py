@@ -274,3 +274,15 @@ def get_possible_moves(board_data, pos):
         return get_pawn_moves(board, pos, color)
     
     return []  # 未知棋子類型
+
+def check_game_result(board_data):
+    """檢查遊戲是否結束（將/帥被吃）"""
+    board = board_data["board"]
+    red_king_exists = any(piece == "red_king" for piece in board.values())
+    black_king_exists = any(piece == "black_king" for piece in board.values())
+    
+    if not red_king_exists:
+        return "black"  # 黑方勝
+    if not black_king_exists:
+        return "red"    # 紅方勝
+    return None         # 遊戲繼續
