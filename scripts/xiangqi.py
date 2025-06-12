@@ -91,7 +91,7 @@ def update_readme(move, turn, image_filename):
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/{image_filename}?{timestamp}"
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board/{image_filename}?{timestamp}"
 
     new_section = f"""
 
@@ -142,12 +142,25 @@ def draw_board_image(board_data):
 
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     new_image_name = f"board_{timestamp}.png"
-    new_image_path = os.path.join("images", new_image_name)
+    new_image_path = os.path.join("images/board", new_image_name)
     img.save(new_image_path)
     print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
 
     # 同步為最新棋盤
     img.save(BOARD_IMAGE)
+
+    # 刪除舊的棋盤圖片（保留最新的一張）
+    board_dir = "images/board"
+    if os.path.exists(board_dir):
+        board_files = [f for f in os.listdir(board_dir) if f.startswith("board_") and f.endswith(".png")]
+        board_files.sort()
+        # 保留最新的檔案，刪除其他
+        for old_file in board_files[:-1]:
+            try:
+                os.remove(os.path.join(board_dir, old_file))
+                print(f"🗑️ 已刪除舊棋盤圖片: {old_file}")
+            except Exception as e:
+                print(f"⚠️ 無法刪除 {old_file}: {e}")
 
     return new_image_name
 
@@ -195,7 +208,7 @@ def draw_board_image(board_data):
 
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     new_image_name = f"board_{timestamp}.png"
-    new_image_path = os.path.join("images", new_image_name)
+    new_image_path = os.path.join("images/board", new_image_name)
     img.save(new_image_path)
     print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
 
