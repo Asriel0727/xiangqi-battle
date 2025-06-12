@@ -50,8 +50,8 @@ def reset_board():
         "history": []
     }
     save_board(board)
-    draw_board_image(board)
-    update_readme("新對局開始", board["turn"])
+    image_filename = draw_board_image(board)  # 生成新圖片並獲取文件名
+    update_readme("新對局開始", board["turn"], image_filename)  # 傳入圖片文件名
     return board
 
 def load_board():
