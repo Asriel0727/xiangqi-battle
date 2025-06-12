@@ -94,29 +94,54 @@ def update_readme(move, turn, image_filename):
     # 獲取當前棋盤狀態
     board = load_board()
     
-    # 生成移動建議表格
-    moves_table = "## ♟️ 可行動的棋子\n\n"
-    moves_table += "| 棋子 | 位置 | 可移動位置 | 行動連結 |\n"
-    moves_table += "|------|------|------------|----------|\n"
+    # 生成移動建議說明
+    moves_section = "## ♟️ 可行動的棋子\n\n"
+    moves_section += "點擊位置連結可直接建立移動指令：\n\n"
     
     # 獲取當前玩家的所有棋子
     current_pieces = {pos: piece for pos, piece in board["board"].items() 
                      if piece.startswith(turn)}
     
-    for pos, piece in current_pieces.items():
+    # 棋子顯示順序：將 > 士 > 象 > 馬 > 車 > 炮 > 兵
+    piece_order = {
+        "king": 1,
+        "mandarin": 2,
+        "elephant": 3,
+        "knight": 4,
+        "rook": 5,
+        "cannon": 6,
+        "pawn": 7
+    }
+    
+    # 按棋子類型排序
+    sorted_pieces = sorted(current_pieces.items(),
+                         key=lambda x: piece_order.get(x[1].split('_')[1], 8))
+    
+    for pos, piece in sorted_pieces:
         possible_moves = get_possible_moves(board, pos)
         if possible_moves:
             piece_type = piece.split('_')[1]
-            move_links = []
-            for target in possible_moves:
-                issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}&body=請勿修改標題，直接提交即可"
-                move_links.append(f"[{target}]({issue_link})")
+            piece_name = {
+                "king": "將" if turn == "red" else "帥",
+                "mandarin": "士",
+                "elephant": "相" if turn == "red" else "象",
+                "knight": "馬",
+                "rook": "車",
+                "cannon": "炮",
+                "pawn": "兵" if turn == "red" else "卒"
+            }.get(piece_type, piece_type)
             
-            # 將移動連結分組顯示，每組5個
-            grouped_links = [move_links[i:i+5] for i in range(0, len(move_links), 5)]
-            links_display = "<br>".join([", ".join(group) for group in grouped_links])
+            moves_section += f"### {piece_name} @ {pos}\n"
             
-            moves_table += f"| {piece_type} | {pos} | {', '.join(possible_moves)} | {links_display} |\n"
+            # 分組顯示移動選項（每行5個）
+            for i in range(0, len(possible_moves), 5):
+                move_group = possible_moves[i:i+5]
+                move_links = []
+                for target in move_group:
+                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}&body=請勿修改標題，直接提交即可"
+                    move_links.append(f"[{target}]({issue_link})")
+                moves_section += " ".join(move_links) + "\n"
+            moves_section += "\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -128,10 +153,10 @@ def update_readme(move, turn, image_filename):
 ✅ 最新一步：{move}  
 🎯 現在輪到：**{chinese_turn}方**
 
-{moves_table}
+{moves_section}
 
 ### 如何移動？
-1. 點擊上方表格中的位置連結 (如 [a2](https://...))
+1. 點擊上方的位置連結 (如 `a2-a3`)
 2. 將會自動建立一個包含移動指令的 Issue
 3. 直接提交該 Issue 即可完成移動
 """
@@ -278,6 +303,6 @@ def main():
         return
 
     print("⚠️ 不支援的指令類型")
-    
+
 if __name__ == "__main__":
     main()
