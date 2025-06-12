@@ -90,15 +90,15 @@ def update_readme(move, turn, image_filename):
         content = content.rsplit("✅ 最新一步：", 1)[0].strip()
 
     chinese_turn = "紅" if turn == "red" else "黑"
-    
+
     # 獲取當前棋盤狀態
     board = load_board()
-    
+
     # 生成移動建議表格
     moves_table = "## ♟️ 可行動的棋子\n\n"
     moves_table += "| 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |\n"
     moves_table += "|------|------|-----------------------------|\n"
-    
+
     # 棋子類型對應的中文名稱
     piece_names = {
         "king": "將/帥",
@@ -109,7 +109,7 @@ def update_readme(move, turn, image_filename):
         "cannon": "炮",
         "pawn": "兵/卒"
     }
-    
+
     # 按棋子類型分組
     moves_by_piece = {}
     for pos, piece in board["board"].items():
@@ -120,20 +120,22 @@ def update_readme(move, turn, image_filename):
                 if piece_type not in moves_by_piece:
                     moves_by_piece[piece_type] = []
                 moves_by_piece[piece_type].append((pos, possible_moves))
-    
+
     # 按指定順序顯示棋子
     display_order = ["king", "mandarin", "elephant", "knight", "rook", "cannon", "pawn"]
-    
+
     for piece_type in display_order:
         if piece_type in moves_by_piece:
             for pos, moves in moves_by_piece[piece_type]:
                 # 創建所有移動連結
                 move_links = []
                 for target in moves:
-                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}|game001&body=請勿修改標題，直接提交即可"
+                    raw_title = f"xiangqi|move|{pos}-{target}|game001"
+                    encoded_title = raw_title.replace("|", "%7C")
+                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title={encoded_title}&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
-                
-                moves_table += f"%7C {piece_names.get(piece_type, piece_type)} %7C {pos} %7C {' '.join(move_links)} %7C \n"
+
+                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -152,6 +154,7 @@ def update_readme(move, turn, image_filename):
 2. 系統會自動建立包含移動指令的 Issue
 3. 直接提交該 Issue 即可完成移動
 """
+
     content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
 
     with open(README_FILE, 'w', encoding='utf-8') as f:
