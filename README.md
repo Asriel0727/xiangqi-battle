@@ -7,9 +7,7 @@
 
 ## ⚫️ 當前棋盤
 
+![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?20250612020050)
 
-
-![current board](https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?20250612015308)
-
-✅ 最新一步：a10-a9  
-🎯 現在輪到：**紅方**
+✅ 最新一步：b1-b2  
+🎯 現在輪到：**黑方**
