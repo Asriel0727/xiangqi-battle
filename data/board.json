@@ -1,6 +1,10 @@
 {
   "turn": "red",
   "board": {
+    "a1": "red_rook",
+    "b1": "red_knight",
+    "c1": "red_elephant",
+    "d1": "red_mandarin",
     "e1": "red_king",
     "f1": "red_mandarin",
     "g1": "red_elephant",
@@ -13,6 +17,8 @@
     "e4": "red_pawn",
     "g4": "red_pawn",
     "i4": "red_pawn",
+    "a10": "black_rook",
+    "b10": "black_knight",
     "c10": "black_elephant",
     "d10": "black_mandarin",
     "e10": "black_king",
@@ -26,22 +32,7 @@
     "c7": "black_pawn",
     "e7": "black_pawn",
     "g7": "black_pawn",
-    "i7": "black_pawn",
-    "a2": "red_rook",
-    "a9": "black_rook",
-    "b2": "red_knight",
-    "b9": "black_knight",
-    "c2": "red_elephant",
-    "d2": "red_mandarin"
+    "i7": "black_pawn"
   },
-  "history": [
-    "a1-a2",
-    "a10-a9",
-    "b1-b2",
-    "a10-a9",
-    "b10-b9",
-    "c1-c2",
-    "b7-b6",
-    "d1-d2"
-  ]
+  "history": []
 }
