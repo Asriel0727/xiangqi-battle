@@ -103,7 +103,7 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     image_url = f"https://raw.githubusercontent.com/{repo_name}/main/images/board/{image_filename}?{timestamp}"
-
+    reset_url = f"https://github.com/{repo_name}/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可"
     new_section = f"""
 
 ✅ 最新一步：{move}  
@@ -114,7 +114,7 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
 
 {history_section}  
 
-[重開一局]("https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可")
+👉 [重開一局]({reset_url})
 
 """
 
