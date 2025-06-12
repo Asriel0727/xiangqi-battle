@@ -1,5 +1,5 @@
 {
-  "turn": "black",
+  "turn": "red",
   "board": {
     "f1": "red_mandarin",
     "g1": "red_elephant",
@@ -12,7 +12,6 @@
     "e4": "red_pawn",
     "g4": "red_pawn",
     "i4": "red_pawn",
-    "e10": "black_king",
     "f10": "black_mandarin",
     "g10": "black_elephant",
     "h10": "black_knight",
@@ -32,7 +31,8 @@
     "c9": "black_elephant",
     "d2": "red_mandarin",
     "d9": "black_mandarin",
-    "e2": "red_king"
+    "e2": "red_king",
+    "e9": "black_king"
   },
   "history": [
     "a1-a2",
@@ -45,6 +45,7 @@
     "d10-d9",
     "E1-E2",
     "e1-e2",
-    "d10-d9"
+    "d10-d9",
+    "e10-e9"
   ]
 }
