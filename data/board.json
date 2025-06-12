@@ -3,7 +3,6 @@
   "board": {
     "g1": "red_elephant",
     "h1": "red_knight",
-    "i1": "red_rook",
     "b3": "red_cannon",
     "h3": "red_cannon",
     "a4": "red_pawn",
@@ -14,7 +13,6 @@
     "f10": "black_mandarin",
     "g10": "black_elephant",
     "h10": "black_knight",
-    "i10": "black_rook",
     "b8": "black_cannon",
     "h8": "black_cannon",
     "a7": "black_pawn",
@@ -32,7 +30,9 @@
     "d9": "black_mandarin",
     "e2": "red_king",
     "e9": "black_king",
-    "f2": "red_mandarin"
+    "f2": "red_mandarin",
+    "i9": "black_rook",
+    "i2": "red_rook"
   },
   "history": [
     "a1-a2",
@@ -47,6 +47,8 @@
     "e1-e2",
     "d10-d9",
     "e10-e9",
-    "f1-f2"
+    "f1-f2",
+    "i10-i9",
+    "i1-i2"
   ]
 }
