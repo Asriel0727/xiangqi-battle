@@ -133,7 +133,7 @@ def update_readme(move, turn, image_filename):
                     issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}|game001&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
                 
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n"
+                moves_table += f"%7C {piece_names.get(piece_type, piece_type)} %7C {pos} %7C {' '.join(move_links)} %7C \n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
