@@ -2,7 +2,7 @@ import os
 import json
 from github import Github
 from PIL import Image, ImageDraw
-from datetime import datetime
+import random
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -96,8 +96,9 @@ def update_readme(move, turn):
     chinese_turn = "紅" if turn == "red" else "黑"
     
     # 加上隨機參數避免快取
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?{timestamp}"
+    random_param = random.randint(0, 1000000)  # 使用随机数避免缓存
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?rand={random_param}"
+    print(f"🔄 生成的图片 URL: {image_url}")
 
 
     new_section = f"""
