@@ -7,7 +7,7 @@
 
 ## ⚫️ 當前棋盤
 
-![current board](./images/board.png)
+![current board](images/board.png)
 
 > 棋盤圖片會隨每一步更新
 
