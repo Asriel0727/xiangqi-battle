@@ -135,7 +135,7 @@ def update_readme(move, turn, image_filename):
                     issue_link = f"https://github.com/{REPO_NAME}/issues/new?title={encoded_title}&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
 
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n"
+                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n、 \n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -177,6 +177,9 @@ def draw_board_image(board_data):
     img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
     draw = ImageDraw.Draw(img)
 
+    # 使用預設或自訂字體
+    font = ImageFont.load_default()
+
     # 畫網格線
     for i in range(BOARD_WIDTH):
         x = i * CELL_SIZE + CELL_SIZE // 2
@@ -185,15 +188,17 @@ def draw_board_image(board_data):
         y = j * CELL_SIZE + CELL_SIZE // 2
         draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
 
-    # 加上座標文字
-    font = ImageFont.load_default()
+    # 左邊標示行數（10~1）
+    for j in range(BOARD_HEIGHT):
+        y = j * CELL_SIZE + CELL_SIZE // 2
+        row_label = str(BOARD_HEIGHT - j).rjust(2, '0')  # 10 ~ 01
+        draw.text((5, y - 6), row_label, fill="black", font=font)
+
+    # 底部標示列名（a ~ i）
     cols = "abcdefghi"
-    for row in range(1, BOARD_HEIGHT + 1):
-        for col_idx, col in enumerate(cols):
-            pos_label = f"{col}{row}"
-            x = col_idx * CELL_SIZE + CELL_SIZE // 2 + 2
-            y = (BOARD_HEIGHT - row) * CELL_SIZE + CELL_SIZE // 2 + 2
-            draw.text((x, y), pos_label, fill=(100, 100, 100), font=font)
+    for i, col in enumerate(cols):
+        x = i * CELL_SIZE + CELL_SIZE // 2
+        draw.text((x - 3, IMG_HEIGHT - 15), col, fill="black", font=font)
 
     # 畫棋子圖片
     total_pieces = 0
