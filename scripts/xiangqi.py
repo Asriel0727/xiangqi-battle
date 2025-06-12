@@ -23,6 +23,16 @@ CELL_SIZE = 60
 IMG_WIDTH = BOARD_WIDTH * CELL_SIZE
 IMG_HEIGHT = BOARD_HEIGHT * CELL_SIZE
 
+# 設定邊界大小
+MARGIN_LEFT = 30
+MARGIN_TOP = 30
+MARGIN_BOTTOM = 30
+MARGIN_RIGHT = 10
+
+# 重算圖片總尺寸
+IMG_WIDTH_EXT = IMG_WIDTH + MARGIN_LEFT + MARGIN_RIGHT
+IMG_HEIGHT_EXT = IMG_HEIGHT + MARGIN_TOP + MARGIN_BOTTOM
+
 PIECE_IMG_DIR = "images/pieces"
 
 def parse_move(issue_title):
@@ -135,7 +145,7 @@ def update_readme(move, turn, image_filename):
                     issue_link = f"https://github.com/{REPO_NAME}/issues/new?title={encoded_title}&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
 
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n、 \n"
+                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {'、'.join(move_links)} |\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -170,40 +180,44 @@ def save_board(data):
     print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
 
 def draw_board_image(board_data):
-    # 確保 board 目錄存在
     board_dir = "images/board"
     os.makedirs(board_dir, exist_ok=True)
 
-    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
+    img = Image.new("RGB", (IMG_WIDTH_EXT, IMG_HEIGHT_EXT), "burlywood")
     draw = ImageDraw.Draw(img)
 
-    # 使用預設或自訂字體
     font = ImageFont.load_default()
 
-    # 畫網格線
+    # 畫棋盤格線（偏移邊界）
     for i in range(BOARD_WIDTH):
-        x = i * CELL_SIZE + CELL_SIZE // 2
-        draw.line([(x, CELL_SIZE // 2), (x, IMG_HEIGHT - CELL_SIZE // 2)], fill="black", width=1)
+        x = MARGIN_LEFT + i * CELL_SIZE + CELL_SIZE // 2
+        draw.line([(x, MARGIN_TOP + CELL_SIZE // 2),
+                   (x, MARGIN_TOP + IMG_HEIGHT - CELL_SIZE // 2)],
+                  fill="black", width=1)
     for j in range(BOARD_HEIGHT):
-        y = j * CELL_SIZE + CELL_SIZE // 2
-        draw.line([(CELL_SIZE // 2, y), (IMG_WIDTH - CELL_SIZE // 2, y)], fill="black", width=1)
+        y = MARGIN_TOP + j * CELL_SIZE + CELL_SIZE // 2
+        draw.line([(MARGIN_LEFT + CELL_SIZE // 2, y),
+                   (MARGIN_LEFT + IMG_WIDTH - CELL_SIZE // 2, y)],
+                  fill="black", width=1)
 
     # 左邊標示行數（10~1）
     for j in range(BOARD_HEIGHT):
-        y = j * CELL_SIZE + CELL_SIZE // 2
-        row_label = str(BOARD_HEIGHT - j).rjust(2, '0')  # 10 ~ 01
+        y = MARGIN_TOP + j * CELL_SIZE + CELL_SIZE // 2
+        row_label = str(BOARD_HEIGHT - j).rjust(2, '0')
         draw.text((5, y - 6), row_label, fill="black", font=font)
 
-    # 底部標示列名（a ~ i）
+    # 底部標示列名（a~i）
     cols = "abcdefghi"
     for i, col in enumerate(cols):
-        x = i * CELL_SIZE + CELL_SIZE // 2
-        draw.text((x - 3, IMG_HEIGHT - 15), col, fill="black", font=font)
+        x = MARGIN_LEFT + i * CELL_SIZE + CELL_SIZE // 2
+        draw.text((x - 3, IMG_HEIGHT_EXT - 20), col, fill="black", font=font)
 
-    # 畫棋子圖片
+    # 畫棋子
     total_pieces = 0
     for pos, piece in board_data.get("board", {}).items():
         x, y = pos_to_xy(pos)
+        x += MARGIN_LEFT
+        y += MARGIN_TOP
         try:
             piece_path = os.path.join(PIECE_IMG_DIR, f"{piece}.png")
             piece_img = Image.open(piece_path).resize((CELL_SIZE, CELL_SIZE))
@@ -222,7 +236,7 @@ def draw_board_image(board_data):
     # 同步為最新棋盤
     img.save(BOARD_IMAGE)
 
-    # 刪除舊的棋盤圖片（保留最新一張）
+    # 清理舊圖
     if os.path.exists(board_dir):
         board_files = [f for f in os.listdir(board_dir)
                        if f.startswith("board_") and f.endswith(".png")]
