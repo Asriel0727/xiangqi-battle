@@ -1,8 +1,9 @@
 import os
 import json
 from github import Github
-from PIL import Image
-from datetime import datetime
+from PIL import Image, ImageDraw
+import time
+import subprocess
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -100,6 +101,11 @@ def update_readme(move, turn, board_data):
         content = content.rstrip()
 
     chinese_turn = "紅" if turn == "red" else "黑"
+    
+    timestamp = int(time.time())
+    commit_sha = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).decode("utf-8").strip()
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?ts={timestamp}&sha={commit_sha}"
+    print(f"🔄 生成的图片 URL: {image_url}")
 
     header = "|   | " + " | ".join([chr(c) for c in range(ord('A'), ord('I') + 1)]) + " |"
     separator = "| - " * (BOARD_WIDTH + 1) + "|"
@@ -143,18 +149,15 @@ def post_comment(repo, issue_num, body):
 
 def draw_board_image(board_data):
     os.makedirs("images", exist_ok=True)
-    board_img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
+    
+    # 强制删除旧图片
+    if os.path.exists(BOARD_IMAGE):
+        os.remove(BOARD_IMAGE)
+        print("♻️ 已删除旧图片")
 
-    # 貼上格子背景圖片
-    for row in range(BOARD_HEIGHT):
-        for col in range(BOARD_WIDTH):
-            pos = f"{chr(ord('a') + col)}{row + 1}"
-            tile_path = os.path.join(TILE_IMG_DIR, f"{pos}.png")
-            try:
-                tile_img = Image.open(tile_path)
-                board_img.paste(tile_img, (col * CELL_SIZE, row * CELL_SIZE))
-            except Exception as e:
-                print(f"\u26a0\ufe0f 載入 {tile_path} 失敗: {e}")
+    # 生成新图片（确保使用最新 board_data）
+    img = Image.new("RGB", (IMG_WIDTH, IMG_HEIGHT), "burlywood")
+    draw = ImageDraw.Draw(img)
 
     # 疊上棋子圖層
     total_pieces = 0
@@ -174,6 +177,8 @@ def draw_board_image(board_data):
     board_img.save(BOARD_IMAGE)
     print(f"\u2705 棋盤圖片生成成功，共貼上 {total_pieces} 個棋子，儲存為 {BOARD_IMAGE}")
 
+    img.save(BOARD_IMAGE)
+    print(f"✅ 图片已保存到: {os.path.abspath(BOARD_IMAGE)}")
 
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)

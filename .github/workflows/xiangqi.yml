@@ -14,22 +14,39 @@ jobs:
     if: startsWith(github.event.issue.title, 'xiangqi|move|') || startsWith(github.event.issue.title, 'xiangqi|chess|new|')
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
+
       - name: Install requirements
         run: pip install -r scripts/requirements.txt || true
+
+      - name: Verify files before
+        run: |
+          ls -la images/ || true
+          ls -la data/ || true
+
       - name: Run xiangqi script
         run: python scripts/xiangqi.py
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify files after
+        run: |
+          ls -la images/
+          ls -la data/
+
       - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add README.md data/board.json images/
-          git commit -m "update board" || echo "No changes"
+          git add --force .
+          git status 
+          git diff --cached --quiet || git commit -m "Update board and image [skip ci]"
           git push
