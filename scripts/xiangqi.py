@@ -94,54 +94,68 @@ def update_readme(move, turn, image_filename):
     # 獲取當前棋盤狀態
     board = load_board()
     
-    # 生成移動建議說明
-    moves_section = "## ♟️ 可行動的棋子\n\n"
-    moves_section += "點擊位置連結可直接建立移動指令：\n\n"
+    # 生成移動建議表格
+    moves_table = "## ♟️ 可行動的棋子\n\n"
+    moves_table += "| 棋子 | 位置 | 可移動位置 (點擊連結直接移動) |\n"
+    moves_table += "|------|------|-----------------------------|\n"
     
-    # 獲取當前玩家的所有棋子
-    current_pieces = {pos: piece for pos, piece in board["board"].items() 
-                     if piece.startswith(turn)}
-    
-    # 棋子顯示順序：將 > 士 > 象 > 馬 > 車 > 炮 > 兵
-    piece_order = {
-        "king": 1,
-        "mandarin": 2,
-        "elephant": 3,
-        "knight": 4,
-        "rook": 5,
-        "cannon": 6,
-        "pawn": 7
+    # 棋子類型對應的中文名稱
+    piece_names = {
+        "king": "將/帥",
+        "mandarin": "士",
+        "elephant": "相/象",
+        "knight": "馬",
+        "rook": "車",
+        "cannon": "炮",
+        "pawn": "兵/卒"
     }
     
-    # 按棋子類型排序
-    sorted_pieces = sorted(current_pieces.items(),
-                         key=lambda x: piece_order.get(x[1].split('_')[1], 8))
-    
-    for pos, piece in sorted_pieces:
-        possible_moves = get_possible_moves(board, pos)
-        if possible_moves:
+    # 按棋子類型分組
+    moves_by_piece = {}
+    for pos, piece in board["board"].items():
+        if piece.startswith(turn):
             piece_type = piece.split('_')[1]
-            piece_name = {
-                "king": "將" if turn == "red" else "帥",
-                "mandarin": "士",
-                "elephant": "相" if turn == "red" else "象",
-                "knight": "馬",
-                "rook": "車",
-                "cannon": "炮",
-                "pawn": "兵" if turn == "red" else "卒"
-            }.get(piece_type, piece_type)
-            
-            moves_section += f"### {piece_name} @ {pos}\n"
-            
-            # 分組顯示移動選項（每行5個）
-            for i in range(0, len(possible_moves), 5):
-                move_group = possible_moves[i:i+5]
+            possible_moves = get_possible_moves(board, pos)
+            if possible_moves:
+                if piece_type not in moves_by_piece:
+                    moves_by_piece[piece_type] = []
+                moves_by_piece[piece_type].append((pos, possible_moves))
+    
+    # 按指定順序顯示棋子
+    display_order = ["king", "mandarin", "elephant", "knight", "rook", "cannon", "pawn"]
+    
+    for piece_type in display_order:
+        if piece_type in moves_by_piece:
+            for pos, moves in moves_by_piece[piece_type]:
+                # 創建移動連結 (最多顯示前5個，避免表格過寬)
                 move_links = []
-                for target in move_group:
+                for target in moves[:5]:
                     issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
-                moves_section += " ".join(move_links) + "\n"
-            moves_section += "\n"
+                
+                # 如果超過5個移動選項，顯示"更多"按鈕
+                more_links = ""
+                if len(moves) > 5:
+                    more_links = f"<br>[更多...](#{piece_type}-{pos}-moves)"
+                
+                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)}{more_links} |\n"
+    
+    # 添加詳細移動選項 (折疊起來)
+    details_section = "\n<details>\n<summary>📜 查看所有移動選項</summary>\n\n"
+    for piece_type in display_order:
+        if piece_type in moves_by_piece:
+            for pos, moves in moves_by_piece[piece_type]:
+                if len(moves) > 5:  # 只有當移動選項多於5個時才顯示
+                    details_section += f"\n### {piece_names.get(piece_type, piece_type)} @ {pos}\n"
+                    move_links = []
+                    for target in moves:
+                        issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}|game001&body=請勿修改標題，直接提交即可"
+                        move_links.append(f"[{target}]({issue_link})")
+                    
+                    # 每行顯示5個連結
+                    for i in range(0, len(move_links), 5):
+                        details_section += " ".join(move_links[i:i+5]) + "<br>\n"
+    details_section += "\n</details>\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -153,11 +167,13 @@ def update_readme(move, turn, image_filename):
 ✅ 最新一步：{move}  
 🎯 現在輪到：**{chinese_turn}方**
 
-{moves_section}
+{moves_table}
+
+{details_section}
 
 ### 如何移動？
-1. 點擊上方的位置連結 (如 `a2-a3`)
-2. 將會自動建立一個包含移動指令的 Issue
+1. 點擊表格中的位置連結 (如 `a2-a3`)
+2. 系統會自動建立包含移動指令的 Issue
 3. 直接提交該 Issue 即可完成移動
 """
     content = content.split("## ⚫️ 當前棋盤")[0] + f"## ⚫️ 當前棋盤\n\n{new_section}"
