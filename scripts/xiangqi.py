@@ -127,35 +127,13 @@ def update_readme(move, turn, image_filename):
     for piece_type in display_order:
         if piece_type in moves_by_piece:
             for pos, moves in moves_by_piece[piece_type]:
-                # 創建移動連結 (最多顯示前5個，避免表格過寬)
+                # 創建所有移動連結
                 move_links = []
-                for target in moves[:5]:
-                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}&body=請勿修改標題，直接提交即可"
+                for target in moves:
+                    issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}|game001&body=請勿修改標題，直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
                 
-                # 如果超過5個移動選項，顯示"更多"按鈕
-                more_links = ""
-                if len(moves) > 5:
-                    more_links = f"<br>[更多...](#{piece_type}-{pos}-moves)"
-                
-                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)}{more_links} |\n"
-    
-    # 添加詳細移動選項 (折疊起來)
-    details_section = "\n<details>\n<summary>📜 查看所有移動選項</summary>\n\n"
-    for piece_type in display_order:
-        if piece_type in moves_by_piece:
-            for pos, moves in moves_by_piece[piece_type]:
-                if len(moves) > 5:  # 只有當移動選項多於5個時才顯示
-                    details_section += f"\n### {piece_names.get(piece_type, piece_type)} @ {pos}\n"
-                    move_links = []
-                    for target in moves:
-                        issue_link = f"https://github.com/{REPO_NAME}/issues/new?title=xiangqi|move|{pos}-{target}|game001&body=請勿修改標題，直接提交即可"
-                        move_links.append(f"[{target}]({issue_link})")
-                    
-                    # 每行顯示5個連結
-                    for i in range(0, len(move_links), 5):
-                        details_section += " ".join(move_links[i:i+5]) + "<br>\n"
-    details_section += "\n</details>\n"
+                moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {' '.join(move_links)} |\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -168,8 +146,6 @@ def update_readme(move, turn, image_filename):
 🎯 現在輪到：**{chinese_turn}方**
 
 {moves_table}
-
-{details_section}
 
 ### 如何移動？
 1. 點擊表格中的位置連結 (如 `a2-a3`)
