@@ -1,5 +1,5 @@
 {
-  "turn": "red",
+  "turn": "black",
   "board": {
     "a1": "red_rook",
     "b1": "red_knight",
@@ -9,7 +9,6 @@
     "f1": "red_mandarin",
     "g1": "red_elephant",
     "h1": "red_knight",
-    "i1": "red_rook",
     "b3": "red_cannon",
     "a4": "red_pawn",
     "c4": "red_pawn",
@@ -32,7 +31,8 @@
     "g7": "black_pawn",
     "i7": "black_pawn",
     "e5": "red_cannon",
-    "e9": "black_knight"
+    "e9": "black_knight",
+    "i2": "red_rook"
   },
   "history": [
     {
@@ -54,6 +54,11 @@
       "turn": "black",
       "move": "g8-e9",
       "user": "Asriel0727"
+    },
+    {
+      "turn": "red",
+      "move": "i1-i2",
+      "user": "SolidDrink"
     }
   ]
 }
