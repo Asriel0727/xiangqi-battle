@@ -62,7 +62,7 @@ def generate_moves_table(board, turn, repo_name):
                 for target in moves:
                     raw_title = f"xiangqi|move|{pos}-{target}|game001"
                     encoded_title = raw_title.replace("|", "%7C")
-                    issue_link = f"https://github.com/{repo_name}/issues/new?title={encoded_title}&body=請勿修改標題，直接提交即可"
+                    issue_link = f"https://github.com/{repo_name}/issues/new?title={encoded_title}&body=請勿修改標題,直接提交即可"
                     move_links.append(f"[{target}]({issue_link})")
 
                 moves_table += f"| {piece_names.get(piece_type, piece_type)} | {pos} | {'、'.join(move_links)} |\n"
@@ -99,14 +99,14 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     new_section = f"""
 
 ✅ 最新一步：{move}  
-🎯 現在輪到：**{chinese_turn}方**
-![current board]({image_url})
+🎯 現在輪到：**{chinese_turn}方**  
+![current board]({image_url})  
 
-{moves_table}
+{moves_table}  
 
-{history_section}
+{history_section}  
 
-[重開一局]{"https://github.com/{repo_name}/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題，直接提交即可"}
+[重開一局]{"https://github.com/Asriel0727/xiangqi-battle/issues/new?title=xiangqi|chess|new|game001&body=請勿修改標題,直接提交即可"}
 
 """
 
