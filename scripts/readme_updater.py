@@ -85,9 +85,12 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     recent_moves = board.get("history", [])[-5:]
     history_section = "### 📜 最近五步：\n\n"
     for i, item in enumerate(recent_moves[::-1], 1):
-        side = "紅" if item["turn"] == "red" else "黑"
-        user = item.get("user", "未知")
-        history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
+        if isinstance(item, dict) and "turn" in item and "move" in item:
+            side = "紅" if item["turn"] == "red" else "黑"
+            user = item.get("user", "未知")
+            history_section += f"{i}. {side}方 ({user})：{item['move']}\n"
+        else:
+            history_section += f"{i}. ❓ 資料格式錯誤：{item}\n"
 
     # 加上隨機參數避免快取
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
