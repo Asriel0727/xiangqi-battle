@@ -2,7 +2,8 @@ import os
 import json
 from github import Github
 from PIL import Image, ImageDraw
-import random
+import time
+import subprocess
 
 # 環境變數
 ISSUE_TITLE = os.environ.get("ISSUE_TITLE")
@@ -95,9 +96,9 @@ def update_readme(move, turn):
 
     chinese_turn = "紅" if turn == "red" else "黑"
     
-    # 加上隨機參數避免快取
-    random_param = random.randint(0, 1000000)  # 使用随机数避免缓存
-    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?rand={random_param}"
+    timestamp = int(time.time())
+    commit_sha = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).decode("utf-8").strip()
+    image_url = f"https://raw.githubusercontent.com/Asriel0727/xiangqi-battle/main/images/board.png?ts={timestamp}&sha={commit_sha}"
     print(f"🔄 生成的图片 URL: {image_url}")
 
 
