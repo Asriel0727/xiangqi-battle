@@ -1,4 +1,3 @@
-我想把我目前的作法改成用每格一張圖片的方式呈現
 import os
 import json
 from github import Github
