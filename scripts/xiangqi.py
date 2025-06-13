@@ -42,11 +42,11 @@ def parse_move(issue_title):
         _, category, action, game_id = issue_title.strip().split('|')
         return category.strip(), action.strip(), game_id.strip()
     except Exception as e:
-        print(f"⚠️ 解析 ISSUE_TITLE 失敗: {e}")
+        print(f"解析 ISSUE_TITLE 失敗: {e}")
         return None, None, None
         
 def reset_board():
-    print("♟️ 正在建立新的棋局...")
+    print("正在建立新的棋局...")
     board = {
         "turn": "red",
         "board": {
@@ -68,16 +68,16 @@ def reset_board():
 
 def load_board():
     if not os.path.exists(BOARD_FILE):
-        print("⚠️ 找不到 board.json，初始化空棋盤")
+        print("找不到 board.json，初始化空棋盤")
         return {"turn": "red", "board": {}, "history": []}
     
     with open(BOARD_FILE, 'r', encoding='utf-8') as f:
         data = json.load(f)
-        print(f"✅ 從 {BOARD_FILE} 載入棋盤資料")
+        print(f"從 {BOARD_FILE} 載入棋盤資料")
 
     # 如果是舊格式（直接是 pos-to-piece dict），轉換為新版格式
     if all(isinstance(k, str) and isinstance(v, str) for k, v in data.items()):
-        print("⚠️ 偵測到舊格式棋盤，自動轉換為新格式")
+        print("偵測到舊格式棋盤，自動轉換為新格式")
         data = {
             "turn": "red",
             "board": data,
@@ -98,7 +98,7 @@ def save_board(data):
     os.makedirs("data", exist_ok=True)
     with open(BOARD_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
-    print(f"✅ 棋盤資料已儲存到 {BOARD_FILE}")
+    print(f"棋盤資料已儲存到 {BOARD_FILE}")
 
 def draw_board_image(board_data):
     board_dir = "images/board"
@@ -145,14 +145,14 @@ def draw_board_image(board_data):
             img.paste(piece_img, (x, y), piece_img.convert("RGBA"))
             total_pieces += 1
         except Exception as e:
-            print(f"⚠️ 無法載入棋子圖檔 {piece}，錯誤：{e}")
+            print(f"無法載入棋子圖檔 {piece}，錯誤：{e}")
 
     # 儲存圖片
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     new_image_name = f"board_{timestamp}.png"
     new_image_path = os.path.join(board_dir, new_image_name)
     img.save(new_image_path)
-    print(f"✅ 棋盤圖片已儲存為 {new_image_path}")
+    print(f"棋盤圖片已儲存為 {new_image_path}")
 
     # 同步為最新棋盤
     img.save(BOARD_IMAGE)
@@ -165,9 +165,9 @@ def draw_board_image(board_data):
         for old_file in board_files[:-1]:
             try:
                 os.remove(os.path.join(board_dir, old_file))
-                print(f"🗑️ 已刪除舊棋盤圖片: {old_file}")
+                print(f"已刪除舊棋盤圖片: {old_file}")
             except Exception as e:
-                print(f"⚠️ 無法刪除 {old_file}: {e}")
+                print(f"無法刪除 {old_file}: {e}")
 
     return new_image_name
 
@@ -176,7 +176,7 @@ def post_comment(repo, issue_num, body):
     issue = repo.get_issue(number=issue_num)
     issue.create_comment(body)
     issue.edit(state="closed")
-    print(f"✅ 已於 Issue #{issue_num} 留言並關閉")
+    print(f"已於 Issue #{issue_num} 留言並關閉")
 
 def pos_to_xy(pos):
     col = ord(pos[0].lower()) - ord('a')
@@ -190,7 +190,7 @@ def pos_to_xy(pos):
 def main():
     category, action, game_id = parse_move(ISSUE_TITLE)
     if not category or not action:
-        print("⚠️ 無法解析 Issue Title，請檢查格式")
+        print("無法解析 Issue Title，請檢查格式")
         return
 
     g = Github(TOKEN)
@@ -198,7 +198,7 @@ def main():
 
     if category == "chess" and action == "new":
         board = reset_board()
-        post_comment(repo, ISSUE_NUMBER, "🆕 已啟動新對局，請紅方先行。")
+        post_comment(repo, ISSUE_NUMBER, "已啟動新對局，請紅方先行。")
         return
 
     if category == "move":
@@ -211,7 +211,7 @@ def main():
 
         # 基本格式檢查
         if '-' not in move:
-            post_comment(repo, ISSUE_NUMBER, "⚠️ 移動指令格式錯誤，應為「起始位置-目標位置」(如 a2-a3)")
+            post_comment(repo, ISSUE_NUMBER, "移動指令格式錯誤，應為「起始位置-目標位置」(如 a2-a3)")
             return
 
         src, dst = move.split('-')
@@ -219,19 +219,19 @@ def main():
         
         # 檢查是否存在棋子
         if not piece:
-            post_comment(repo, ISSUE_NUMBER, f"⚠️ 沒有找到 {src} 的棋子，無法移動")
+            post_comment(repo, ISSUE_NUMBER, f"沒有找到 {src} 的棋子，無法移動")
             return
             
         # 檢查是否輪到該玩家
         piece_color = piece.split('_')[0]
         if piece_color != board["turn"]:
-            post_comment(repo, ISSUE_NUMBER, f"⚠️ 現在輪到 {board['turn']} 方，不能移動 {piece_color} 方的棋子")
+            post_comment(repo, ISSUE_NUMBER, f"現在輪到 {board['turn']} 方，不能移動 {piece_color} 方的棋子")
             return
             
         # 檢查移動是否合法
         possible_moves = get_possible_moves(board, src)
         if dst not in possible_moves:
-            post_comment(repo, ISSUE_NUMBER, f"⚠️ 非法移動！{piece} 不能從 {src} 移動到 {dst}")
+            post_comment(repo, ISSUE_NUMBER, f"非法移動！{piece} 不能從 {src} 移動到 {dst}")
             return
 
         # 執行移動
@@ -260,7 +260,7 @@ def main():
             post_comment(
                 repo, 
                 ISSUE_NUMBER, 
-                f"🏆 遊戲結束！{'紅' if winner == 'red' else '黑'}方獲勝！\n\n" +
+                f"遊戲結束！{'紅' if winner == 'red' else '黑'}方獲勝！\n\n" +
                 "所有移動歷史：\n" + 
                 "\n".join(f"{i+1}. {h['turn']}方 ({h['user']}): {h['move']}" 
                         for i, h in enumerate(board['history']))
@@ -268,9 +268,9 @@ def main():
             return
         else:
             update_readme(move, board["turn"], image_filename, REPO_NAME, README_FILE, BOARD_FILE)
-            post_comment(repo, ISSUE_NUMBER, f"✅ 移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
+            post_comment(repo, ISSUE_NUMBER, f"移動 {move} 已執行，現在輪到 **{board['turn']}** 方")
 
-    print("⚠️ 不支援的指令類型")
+    print("不支援的指令類型")
 
 if __name__ == "__main__":
     main()
