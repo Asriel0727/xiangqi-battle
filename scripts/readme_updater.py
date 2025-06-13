@@ -6,12 +6,12 @@ from xiangqi_rules import get_possible_moves
 def load_board(board_file):
     """從檔案載入棋盤狀態"""
     if not os.path.exists(board_file):
-        print("⚠️ 找不到 board.json，初始化空棋盤")
+        print("找不到 board.json，初始化空棋盤")
         return {"turn": "red", "board": {}, "history": []}
     
     with open(board_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
-        print(f"✅ 從 {board_file} 載入棋盤資料")
+        print(f"從 {board_file} 載入棋盤資料")
 
     # 確保基本欄位存在
     if "board" not in data:
@@ -153,4 +153,4 @@ def update_readme(move, turn, image_filename, repo_name, readme_file, board_file
     with open(readme_file, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    print("✅ README.md 已更新", "，遊戲已結束" if game_ended else f"，目前輪到：{turn}")
+    print("README.md 已更新", "，遊戲已結束" if game_ended else f"，目前輪到：{turn}")
