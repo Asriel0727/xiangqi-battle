@@ -1,5 +1,5 @@
 {
-  "turn": "red",
+  "turn": "black",
   "board": {
     "a1": "red_rook",
     "b1": "red_knight",
@@ -31,8 +31,8 @@
     "i7": "black_pawn",
     "e5": "red_cannon",
     "e9": "black_knight",
-    "i2": "red_rook",
-    "h10": "black_rook"
+    "h10": "black_rook",
+    "h2": "red_rook"
   },
   "history": [
     {
@@ -64,6 +64,11 @@
       "turn": "black",
       "move": "i10-h10",
       "user": "Asriel0727"
+    },
+    {
+      "turn": "red",
+      "move": "i2-h2",
+      "user": "zolachou"
     }
   ]
 }
