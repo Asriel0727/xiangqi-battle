@@ -1,0 +1,40 @@
+name: Translate README
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 翻譯成英文版本 README.en.md
+      - name: Translate to English
+        uses: dephraiim/translate-readme@main
+        with:
+          LANG: en
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add README.en.md README.zh-CN.md
+          git commit -m ":memo: Auto translate README" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
