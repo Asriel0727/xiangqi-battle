@@ -1,21 +1,17 @@
 name: Translate README
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - 'README.md'
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Xiangqi Move Handler"]
+    types:
+      - completed
 
 permissions:
   contents: write
 
 jobs:
   translate:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,13 +21,12 @@ jobs:
         with:
           node-version: 18
 
-      # 翻譯成英文版本 README.en.md
       - name: Translate to English
         uses: dephraiim/translate-readme@main
         with:
           LANG: en
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 傳入 token 給 action 使用
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push changes
         run: |
@@ -41,4 +36,4 @@ jobs:
           git commit -m ":memo: Auto translate README" || echo "No changes to commit"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 確保 git push 用的 token 有權限
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
