@@ -11,6 +11,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   translate:
     runs-on: ubuntu-latest
@@ -27,6 +30,8 @@ jobs:
         uses: dephraiim/translate-readme@main
         with:
           LANG: en
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 傳入 token 給 action 使用
 
       - name: Commit and push changes
         run: |
@@ -36,4 +41,4 @@ jobs:
           git commit -m ":memo: Auto translate README" || echo "No changes to commit"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 確保 git push 用的 token 有權限
