@@ -1,5 +1,11 @@
 # 象棋對戰 Xiangqi Battle ♟️
 
+<div align="center">
+
+| [繁體中文](README.md) | [English](README_en.md) | 
+
+</div>
+
 🎮 點擊下方的走法連結來進行對局（使用 GitHub Issue）  
 👥 所有人都可以參與，紅黑輪流走棋！
 
