@@ -53,5 +53,5 @@ jobs:
           git config user.email "github-actions@github.com"
           git add --force .
           git status 
-          git diff --cached --quiet || git commit -m "Update board and image [skip ci]"
+          git diff --cached --quiet || git commit -m "Update board and image"
           git push
