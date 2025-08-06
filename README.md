@@ -2,7 +2,7 @@
 
 <div align="center">
 
-| [繁體中文](README.md) | [English](README.en.md) | [文件說明](ProjectDescription.md)
+| [繁體中文](README.md) | [English](README.en.md) | [文件說明](ProjectDescription.md) |
 
 </div>
 
