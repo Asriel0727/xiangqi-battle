@@ -1,123 +1,38 @@
 {
-  "turn": "black",
+  "turn": "red",
   "board": {
     "a1": "red_rook",
+    "b1": "red_knight",
     "c1": "red_elephant",
     "d1": "red_mandarin",
     "e1": "red_king",
     "f1": "red_mandarin",
     "g1": "red_elephant",
     "h1": "red_knight",
+    "i1": "red_rook",
+    "b3": "red_cannon",
+    "h3": "red_cannon",
     "a4": "red_pawn",
     "c4": "red_pawn",
     "e4": "red_pawn",
     "g4": "red_pawn",
+    "i4": "red_pawn",
     "a10": "black_rook",
     "b10": "black_knight",
     "c10": "black_elephant",
     "d10": "black_mandarin",
-    "e10": "red_cannon",
+    "e10": "black_king",
     "f10": "black_mandarin",
     "g10": "black_elephant",
+    "h10": "black_knight",
+    "i10": "black_rook",
     "b8": "black_cannon",
+    "h8": "black_cannon",
     "a7": "black_pawn",
     "c7": "black_pawn",
     "e7": "black_pawn",
     "g7": "black_pawn",
-    "i5": "red_pawn",
-    "i9": "black_rook",
-    "h5": "red_rook",
-    "i6": "black_pawn",
-    "a3": "red_knight",
-    "i8": "black_cannon",
-    "e3": "red_cannon",
-    "d7": "black_knight"
+    "i7": "black_pawn"
   },
-  "history": [
-    {
-      "turn": "red",
-      "move": "h3-h5",
-      "user": "MauerLiFun2"
-    },
-    {
-      "turn": "black",
-      "move": "h10-g8",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "h5-e5",
-      "user": "MauerLiFun2"
-    },
-    {
-      "turn": "black",
-      "move": "g8-e9",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "i1-i2",
-      "user": "SolidDrink"
-    },
-    {
-      "turn": "black",
-      "move": "i10-h10",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "i2-h2",
-      "user": "zolachou"
-    },
-    {
-      "turn": "black",
-      "move": "h10-h9",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "i4-i5",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "black",
-      "move": "h9-i9",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "h2-h5",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "black",
-      "move": "i7-i6",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "b1-a3",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "black",
-      "move": "h8-i8",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "b3-e3",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "black",
-      "move": "e9-d7",
-      "user": "Asriel0727"
-    },
-    {
-      "turn": "red",
-      "move": "e5-e10",
-      "user": "Asriel0727"
-    }
-  ]
+  "history": []
 }
